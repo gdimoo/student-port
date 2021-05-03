@@ -9,19 +9,42 @@
 
     <!-- </form> -->
     <div class="space">
-        <router-link to="/login-harvest">login-harvest</router-link>
-        <br><router-link to="/login-milling">login-milling</router-link>
-        <br><router-link to="/login-stow">login-stow</router-link>
+      <router-link to="/login-harvest">login-harvest</router-link>
+      <br /><router-link to="/login-milling">login-milling</router-link>
+      <br /><router-link to="/login-stow">login-stow</router-link>
+      <br /><GoogleLogin
+        :params="params"
+        :onSuccess="onSuccess"
+        :onFailure="onFailure"
+        >Login</GoogleLogin
+      >
     </div>
   </div>
 </template>
 
 <script>
+import GoogleLogin from "vue-google-login";
 import axios from "axios";
 // import dropdown from
 export default {
   name: "post-request-set-headers",
+  data() {
+    return {
+      // client_id is the only required property but you can add several more params, full list down bellow on the Auth api section
+      params: {
+        client_id:
+          "624928619172-6cq2g8hagvcaa5cmrql2jegiqe9ref1q.apps.googleusercontent.com",
+      },
+      // only needed if you want to render the button with the google ui
+      renderParams: {
+        width: 250,
+        height: 50,
+        longtitle: true,
+      },
+    };
+  },
   components: {
+    GoogleLogin,
   },
   computed: {
     user() {
@@ -29,6 +52,12 @@ export default {
     },
   },
   methods: {
+    onSuccess(googleUser) {
+      console.log(googleUser);
+
+      // This only gets the user information: id, name, imageUrl and email
+      console.log(googleUser.getBasicProfile());
+    },
     login() {
       console.log("cur user to login", this.user);
       // POST request using axios with set headers
@@ -54,8 +83,7 @@ export default {
             this.$router.replace({ path: "/produc" });
           }
         })
-        .catch((err) => alert(err)
-        );
+        .catch((err) => alert(err));
       // this.$router.replace({ path: '/harvest1' });
     },
   },
