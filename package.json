@@ -1,0 +1,45 @@
+{
+  "name": "coffee-trace",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@fawmi/vue-google-maps": "^0.7.12",
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "chokidar": "^3.5.1",
+    "core-js": "^3.6.5",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.29.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "qrcode": "^1.4.4",
+    "vue": "^2.6.11",
+    "vue-dropdowns": "^1.1.2",
+    "vue-moment": "^4.1.0",
+    "vue-qrcode": "^0.3.5",
+    "vue-qrcode-reader": "^3.0.0",
+    "vue-router": "^3.2.0",
+    "vue2-gmap-custom-marker": "^6.0.1",
+    "vue2-google-maps": "^0.10.7",
+    "vuetify": "^2.4.9",
+    "vuex": "^3.4.0",
+    "vuex-extensions": "^1.1.5"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
