@@ -1,60 +1,48 @@
 <template>
-  <div id="harvest2">
+  <div id="study_report2">
     <header>
-      <router-link to="/harvest1">
+      <router-link to="/training">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
     <section>
-      <h2>ข้อมูลเบื้องต้น</h2>
+      <h2>ข้อมูลผู้เข้าอบรม</h2>
       <div class="input">
-        <p>หมายเลขล็อต</p>
+        <p>เลขบัตรประชาชนผู้เข้าอบรม</p>
+        <input
+          v-model="idCard"
+          type="text"
+          name="เลขบัตรประชาชนผู้เข้าอบรม"
+          placeholder="เลขบัตรประชาชนผู้เข้าอบรม"
+        />
+        <p>คำนำหน้าชื่อ</p>
         <input
           type="text"
-          name="เลขล็อต"
-          :disabled="true"
-          v-model="lotID"
-          placeholder="หมายเลขล็อต"
-        />
-        <p>สายพันธุ์</p>
-        <select id="Species" name="Species" v-model="species" form="Species">
-          <option value="อราบิก้า">อราบิก้า</option>
-          <option value="โรบัสต้า">โรบัสต้า</option>
-        </select>
-        <p>วัน/เดือน/ปี การเก็บเกี่ยว</p>
-        <input
-          type="date"
           name="ว/ด/ป"
-          v-model="harvestDate"
+          v-model="study_reportDate"
           placeholder="ว/ด/ป"
           value="2021-03-10"
         />
-        <p>ส่วนผสมในดิน/สารเคมีที่ใช้</p>
+        <p>ชื่อ-นามสกุล</p>
         <input
-          v-model="fertilizer"
           type="text"
-          name="ส่วนผสมในดิน/สารเคมีที่ใช้"
-          placeholder="หน้าดิน ปุ๋ยคอก ปูนขาว (โดโลไมท์)  ปุ๋ยฟอสเฟตและฟูราดาน ผสมให้เข้ากัน และไม่ใช้สารเคมี"
+          name="ว/ด/ป"
+          v-model="study_reportDate"
+          placeholder="ว/ด/ป"
+          value="2021-03-10"
         />
-      </div>
-      <h2>วิธีเก็บ</h2>
-      <div class="input">
-        <p>วิธีเก็บเกี่ยว</p>
-        <select id="how" name="how" form="how" v-model="method">
-          <option value="แบบรวดเดียว">แบบรวดเดียว</option>
-          <option value="แบบคัดสรร">แบบคัดสรร</option>
-        </select>
-        <p>ปริมาณ</p>
+        <p>วัน/เดือน/ปี เกิด</p>
         <input
-          type="number"
-          name="ปริมาณ"
-          v-model="value"
-          placeholder="ปริมาณ"
+          type="date"
+          name="ว/ด/ป"
+          v-model="study_reportDate"
+          placeholder="ว/ด/ป"
+          value="2021-03-10"
         />
       </div>
     </section>
     <div class="input">
-      <button @click="created()">QR Code</button>
+      <button @click="created()">บันทึกข้อมูล</button>
     </div>
     <!-- <div class="input">
       <router-link to="/qr">QR Code</router-link>
@@ -65,17 +53,23 @@
 <script>
 import axios from "axios";
 import moment from 'moment';
-// lotID = YYYYMMDD(0,1,2)(userid)(time)
+// docID = YYYYMMDD(0,1,2)(userid)(time)
 export default {
-  name: "harvest2",
+  name: "study_report2",
   data() {
     return {
-      lotID: moment(new Date()).format('YYYYMMDDhmm')+'0'+localStorage.getItem('LoggedUser'),
+      docID: moment(new Date()).format('YYYYMMDDhmm')+'0'+localStorage.getItem('LoggedUser'),
       species: "",
-      harvestDate: "",
+      study_reportDate: "",
       fertilizer: "",
       method: "",
       value: 0,
+      workExperiences: [
+      {
+        company: "",
+        title: ""
+      },
+    ]
     };
   },
   computed: {
@@ -89,13 +83,13 @@ export default {
   methods: {
     created() {
       // POST request using axios with set headers
-      this.$store.commit('setLotID', this.lotID)
+      this.$store.commit('setdocID', this.docID)
 
       this.$store.commit("setFarm", {
         ...this.farm,
         species:this.species,
-        lotID: this.lotID,
-        harvestDate: this.harvestDate,
+        docID: this.docID,
+        study_reportDate: this.study_reportDate,
         fertilizer: this.fertilizer,
         method: this.method,
         value: String(this.value),
@@ -115,28 +109,41 @@ export default {
         }).catch((err) => {
         console.log(err.response.status);
         if (err.response.status === 401) {
-          this.$router.push("/");
-          alert("คุณไม่มีสิทธิ์ กรุณา Login");
+          // this.$router.push("/");
+          // alert("คุณไม่มีสิทธิ์ กรุณา Login");
           
         }
       });
     },
-  },
-  created(){
-    console.log('harvest2',this.$store.state.token);
-    axios
-        .get(this.$store.state.url.farmer, {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        }).catch((err) => {
-          this.$router.push("/");
-          alert("คุณไม่มีสิทธิ์ กรุณา Login",err);
-      });
+    addExperience () {
+      this.workExperiences.push({
+        company: '',
+        title: ''
+      })
     },
+
+    submit () {
+      const data = {
+        workExperiences: this.workExperiences
+      }
+      alert(JSON.stringify(data, null, 2))
+    }
+  },
+  // created(){
+  //   console.log('study_report2',this.$store.state.token);
+  //   axios
+  //       .get(this.$store.state.url.farmer, {
+  //         headers: {
+  //           Authorization: localStorage.getItem('token'),
+  //         },
+  //       })
+  //       .then((res) => {
+  //         console.log(res);
+  //       }).catch((err) => {
+  //         // this.$router.push("/");
+  //         alert(err);
+  //     });
+  //   },
   
 };
 </script>

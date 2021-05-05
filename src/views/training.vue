@@ -7,23 +7,19 @@
     </header>
     <section>
       <div class="study_report">
-        <div class="box_har"></div>
-        <router-link to="/study_report1"><h1>ขอผลการเรียน</h1></router-link>
-      </div>
-      <div class="study_report">
-        <div class="box_har"></div>
-        <router-link to="/study_report1"><h1>ขอผลการอบรม</h1></router-link>
-      </div>
-      <div class="cert">
-        <div class="box_mil"></div>
-        <router-link to="/student"><h1>แฟ้มผลงาน</h1></router-link>
-      </div>
+      <div class="box_har"></div>
+      <router-link to="/cert1"><h1>บันทึกผลการอบรม</h1></router-link>
+    </div>
+    <div class="cert">
+      <div class="box_mil"></div>
+      <router-link to="/participate"><h1>ข้อมูลผู้เข้าอบรม</h1></router-link>
+    </div>
     </section>
   </div>
 </template>
 <script>
 export default {
-  name: "school",
+  name: "training",
   components: {},
   methods: {
     // Tostudy_report(){
@@ -33,35 +29,35 @@ export default {
 };
 </script>
 <style scoped>
-header {
+header{
   height: 50px;
   position: relative;
   margin-bottom: 20px;
 }
-header i {
+header i{
   position: absolute;
   left: 10%;
   bottom: 0;
 }
 
 .nav__icon {
-  font-size: 30px;
-  color: #000;
+    font-size: 30px;
+    color: #000;
 }
 
 div a {
   text-decoration: none;
   color: #000;
 }
-a h1 {
+a h1{
   font-size: 20px;
-  font-weight: inherit;
+  font-weight:inherit;
   position: absolute;
   top: 35%;
   right: 10%;
 }
 
-section {
+section{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,48 +65,49 @@ section {
   margin: 0 auto;
 }
 
-.study_report {
+.study_report{
   height: 130px;
   width: 90%;
-  border: 1px solid #a9d730;
+  border: 1px solid #A9D730;
   display: flex;
   position: relative;
   margin-bottom: 30px;
 }
-.box_har {
+.box_har{
   height: 130px;
   width: 50%;
-  background-color: #a9d730;
+  background-color: #A9D730;
 }
 
-.cert {
+.cert{
   height: 130px;
   width: 90%;
-  border: 1px solid #eead00;
+  border: 1px solid #EEAD00;
   display: flex;
   position: relative;
   margin-bottom: 30px;
 }
-.box_mil {
+.box_mil{
   height: 130px;
   width: 50%;
-  background-color: #eead00;
+  background-color: #EEAD00;
 }
-.cert a h1 {
+.cert a h1{
   left: 65%;
 }
 
-.school {
+.school{
   height: 130px;
   width: 90%;
-  border: 1px solid #e22e17;
+  border: 1px solid #E22E17;
   display: flex;
   position: relative;
   margin-bottom: 30px;
 }
-.box_st {
+.box_st{
   height: 130px;
   width: 50%;
-  background-color: #e22e17;
+  background-color: #E22E17;
 }
+
 </style>

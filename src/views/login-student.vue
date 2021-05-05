@@ -1,85 +1,43 @@
 <template>
-  <div class="login-milling">
-     <header>
-     <nav>
-      <div class="logo"> <router-link to="#">LOGO</router-link></div>
-     </nav>
-    <p>Coffee Bean Trace</p>
-   </header>
+
+  <div class="login-student">
+
         <div class="title">
-            <img src="../assets/milling.svg" alt="milling">
-            <h3>โรงสี</h3>
+            <img src="../assets/student.svg" alt="นักเรียน">
+            <h3>นักเรียน</h3>
         </div>
     <div class="container">
-     
-<dropdown class="my-dropdown-toggle"
-          :options="arrayOfObjects" 
-          :selected="object" 
-          v-on:updateOption="methodToRunOnSelect" 
-          :placeholder="'เลือกผู้ใช้'"
-          :closeOnOutsideClick="true">
-</dropdown>
-
-      <!-- <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="ID" name="uname" required>
-
-    <br><label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Password" name="psw" required> -->
-
-      <!-- <br><button v-on:click="login()">Login</button> -->
+      
+        <input
+          v-model="user"
+          type="text"
+          name="เลขประจำตัวประชาชน"
+          placeholder="เลขประจำตัวประชาชน"
+          required
+        />
       <br><button @click="login()">Login</button>
     </div>
-    <!-- </form> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import dropdown from 'vue-dropdowns';
-
 export default {
-  name: "login-harvest",
-  data(){
-    return{
-arrayOfObjects: [
-            {
-                name: 'milling1',
-          
-            }],
-            object: {
-              name: this.user,
-            }
+  name: "login-student",
+  created(){
+    if (localStorage.getItem("LoggedUser")) {
+      this.$router.replace({ path: "/home" });
     }
-  },
-  components: {            'dropdown': dropdown,
-
-  },
-        created(){
-          this.object = this.$store.state.user
         },
-  computed: {
-    user () {
-      return this.$store.state.user
-    }
-    },
   methods: {
-    methodToRunOnSelect(payload) {
-            this.$store.commit('setUser', payload.name)
-            console.log(this.$store.state.user);
-            // this.object = payload;
-          },
     login() {
       console.log("cur user to login", this.user);
-      // POST request using axios with set headers
-      // const headers = {
-      //   "Authorization": this.user,
-      //   "My-Custom-Header": "foobar"
-      // };
+
       let urlUser = this.$store.state.url.farmer;
-      if (this.user === "milling1") {
-        urlUser = this.$store.state.url.milling;
-      } else if (this.user === "stow1") {
-        urlUser = this.$store.state.url.stow;
+      if (this.user === "cert1") {
+        urlUser = this.$store.state.url.cert;
+      } else if (this.user === "school1") {
+        urlUser = this.$store.state.url.school;
       }
       axios
         .post(urlUser + "login", { username: this.user })
@@ -90,12 +48,12 @@ arrayOfObjects: [
             localStorage.setItem("LoggedUser", this.user);
             console.log("login    ", localStorage.getItem("LoggedUser"));
             localStorage.setItem("token", token);
-            this.$router.replace({ path: "/produc" });
+            this.$router.replace({ path: "/school" });
           }
         })
         .catch((err) => alert(err)
         );
-      // this.$router.replace({ path: '/harvest1' });
+      // this.$router.replace({ path: '/study_report1' });
     },
   }
 }
@@ -132,6 +90,10 @@ p{
   text-align: center;
 }
 
+form {
+  border: 3px solid #f1f1f1;
+}
+
 .title{
     margin: 20px;
     text-align: center;
@@ -139,7 +101,7 @@ p{
     font-size: 20px;
 }
 .title img{
-    width: 150px;
+    width: 200px;
 }
 
 button {

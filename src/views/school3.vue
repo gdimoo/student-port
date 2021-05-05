@@ -1,7 +1,7 @@
 <template>
-  <div id="stow3">
+  <div id="school3">
     <header>
-      <router-link :to="'/stow2?id='+this.$store.state.stow.receiveLotID">
+      <router-link :to="'/school2?id='+this.$store.state.school.receivedocID">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
@@ -57,7 +57,7 @@
       <button @click="recordData()">QR Code</button>
     </div>
       <div class="input">
-          <div class="next"><router-link :to="'/stow2?id='+this.$store.state.stow.receiveLotID"><i class="material-icons nav__icon">arrow_back</i></router-link></div>
+          <div class="next"><router-link :to="'/school2?id='+this.$store.state.school.receivedocID"><i class="material-icons nav__icon">arrow_back</i></router-link></div>
       </div>
     </section>
   </div>
@@ -65,35 +65,35 @@
 <script>
 import axios from "axios";
 export default {
-  name: "stow3",
+  name: "school3",
   data() {
     return {
-      name: this.$store.state.stow.info.name,
-      packDate: this.$store.state.stow.info.packDate,
-      expDate: this.$store.state.stow.info.expDate,
-      Detail: this.$store.state.stow.info.Detail,
-      guide: this.$store.state.stow.info.guide,
-      packValue: this.$store.state.stow.info.packValue,
+      name: this.$store.state.school.info.name,
+      packDate: this.$store.state.school.info.packDate,
+      expDate: this.$store.state.school.info.expDate,
+      Detail: this.$store.state.school.info.Detail,
+      guide: this.$store.state.school.info.guide,
+      packValue: this.$store.state.school.info.packValue,
       listing: {},
       info: ''
     };
   },
   computed: {
     user() {
-      return "stow1";
+      return "school1";
     },
-    stow() {
-      return this.$store.state.stow;
+    school() {
+      return this.$store.state.school;
     },
   },
   
   methods: {
     recordData() {
       // POST request using axios with set headers
-      this.$store.commit('setLotID', this.stow.lotID)
+      this.$store.commit('setdocID', this.school.docID)
 
-        this.$store.commit("setStow", {
-        ...this.stow,
+        this.$store.commit("setschool", {
+        ...this.school,
         info:{
         name:this.name,
       packDate:this.packDate,
@@ -103,17 +103,17 @@ export default {
       packValue:this.packValue}
       });
 
-        console.log(this.$store.state.stow);
+        console.log(this.$store.state.school);
 
       axios
-        .post(this.$store.state.url.stow+"api/v1/createData", this.$store.state.stow, {
+        .post(this.$store.state.url.school+"api/v1/createData", this.$store.state.school, {
           headers: {
             Authorization: localStorage.getItem('token'),
           },
         })
         .then((res) => {
           if (res.status == 200) {
-      this.$router.replace({ path: "/qr-stow" });
+      this.$router.replace({ path: "/qr-school" });
             }
           });
     },

@@ -1,14 +1,14 @@
 <template>
-  <div id="harvest1">
+  <div id="study_report1">
     <header>
-      <router-link to="/produc">
+      <router-link to="/school">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
     <div class="title">
-      <h1>เก็บเกี่ยว</h1>
+      <h1>การอบรม</h1>
       <div class="icon">
-        <router-link to="/harvest2">
+        <router-link to="/cert2">
           <i class="material-icons nav__icon">add_circle</i>
         </router-link>
       </div>
@@ -18,16 +18,14 @@
         <div
           class="content"
           v-for="item in this.farmerData"
-          :key="item.lotID"
+          :key="item.docID"
         >
-        <p>หมายเลขเลขล็อต : {{ (item.lotID) }}</p>
-          <p>ว/ด/ป : {{ JSON.parse(item.other).farm.harvestDate }}</p>
-          <p>สายพันธุ์ : {{ (item.species) }}</p>
-          <p>ปริมาณ : {{ (item.value) }} ก.ก.</p> 
-          <!-- {{ JSON.parse(JSON.stringify(item.Record.other)) }} -->
+        <p>หมายเลขเอกสาร : {{ (item.docID) }}</p>
+          <p>ว/ด/ป ที่บันทึกข้อมูล : {{ JSON.parse(item.other).farm.study_reportDate }}</p>
+          <p>เอกสารของ : {{ (item.species) }}</p>
         </div>
       </h1>
-      <h2 v-else>ผู้ใช้ยังไม่มีข้อมูลการเก็บเกี่ยว</h2>
+      <h2 v-else>ผู้ใช้ยังไม่การบันทึกข้อมูลการเรียน</h2>
     </section>
   </div>
 </template>
@@ -35,7 +33,7 @@
 import axios from "axios";
 
 export default {
-  name: "harvest1",
+  name: "study_report1",
   data() {
     return {
       listing: [],
@@ -62,7 +60,7 @@ export default {
         // console.log((this.listing),this.listing.length);
         this.listing.forEach(record => {
           // console.log(record.Record)
-          if (record.Record.lotID.includes('0'+localStorage.getItem('LoggedUser'))) {
+          if (record.Record.docID.includes('0'+localStorage.getItem('LoggedUser'))) {
             this.farmerData.push(record.Record)
           }
           });
@@ -74,8 +72,8 @@ export default {
       .catch((err) => {
         console.log(err.response.status);
         if (err.response.status === 401) {
-          this.$router.push("/produc");
-          alert("คุณไม่มีสิทธิ์ในส่วนการเก็บเกี่ยว");
+          this.$router.push("/school");
+          alert("คุณไม่มีสิทธิ์ในส่วนการนักเรียน");
           
         }
       });

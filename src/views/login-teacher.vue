@@ -1,72 +1,34 @@
 <template>
-  <div class="login-stow">
-     <header>
-     <nav>
-      <div class="logo"> <router-link to="#">LOGO</router-link></div>
-     </nav>
-    <p>Coffee Bean Trace</p>
-   </header>
+  <div class="login-teacher">
+
         <div class="title">
-            <img src="../assets/stow.svg" alt="stow">
-            <h3>โรงคั่ว</h3>
+            <img src="../assets/school.svg" alt="school">
+            <h3>ครู</h3>
         </div>
     <div class="container">
-      
-<dropdown class="my-dropdown-toggle"
-          :options="arrayOfObjects" 
-          :selected="object" 
-          v-on:updateOption="methodToRunOnSelect" 
-          :placeholder="'เลือกผู้ใช้'"
-          :closeOnOutsideClick="true">
-</dropdown>
+      <googleLogin />
 
-      <!-- <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="ID" name="uname" required>
-
-    <br><label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Password" name="psw" required> -->
-
-      <!-- <br><button v-on:click="login()">Login</button> -->
-      <br><button @click="login()">Login</button>
     </div>
-    <!-- </form> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import dropdown from 'vue-dropdowns';
+import googleLogin from "./google-signin";
 
 export default {
-  name: "login-harvest",
-  data(){
-    return{
-arrayOfObjects: [
-            {
-                name: 'stow1',
-            }],
-            object: {
-              name: this.user,
-            }
-    }
-  },
-  components: {            'dropdown': dropdown,
+  name: "login-student",
+  components: {            
+    googleLogin,
 
   },
-        created(){
-          this.object = this.$store.state.user
-        },
-  computed: {
-    user () {
-      return this.$store.state.user
+  created(){
+    if (localStorage.getItem("LoggedUser")) {
+      this.$router.replace({ path: "/school" });
     }
-    },
+          this.$store.commit('setType', 'school')
+        },
   methods: {
-    methodToRunOnSelect(payload) {
-            this.$store.commit('setUser', payload.name)
-            console.log(this.$store.state.user);
-            // this.object = payload;
-          },
     login() {
       console.log("cur user to login", this.user);
       // POST request using axios with set headers
@@ -75,10 +37,10 @@ arrayOfObjects: [
       //   "My-Custom-Header": "foobar"
       // };
       let urlUser = this.$store.state.url.farmer;
-      if (this.user === "milling1") {
-        urlUser = this.$store.state.url.milling;
-      } else if (this.user === "stow1") {
-        urlUser = this.$store.state.url.stow;
+      if (this.user === "cert1") {
+        urlUser = this.$store.state.url.cert;
+      } else if (this.user === "school1") {
+        urlUser = this.$store.state.url.school;
       }
       axios
         .post(urlUser + "login", { username: this.user })
@@ -89,12 +51,12 @@ arrayOfObjects: [
             localStorage.setItem("LoggedUser", this.user);
             console.log("login    ", localStorage.getItem("LoggedUser"));
             localStorage.setItem("token", token);
-            this.$router.replace({ path: "/produc" });
+            this.$router.replace({ path: "/school" });
           }
         })
         .catch((err) => alert(err)
         );
-      // this.$router.replace({ path: '/harvest1' });
+      // this.$router.replace({ path: '/study_report1' });
     },
   }
 }

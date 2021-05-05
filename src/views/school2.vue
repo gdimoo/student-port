@@ -1,7 +1,7 @@
 <template>
-  <div id="milling2">
+  <div id="school2">
     <header>
-      <router-link to="/milling1">
+      <router-link to="/school1">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
@@ -10,8 +10,8 @@
       <div class="input">
         <input
           type="text"
-          name="เลขล็อต"
-          v-model="this.listing.lotID"
+          name="หมายเลขเอกสาร"
+          v-model="this.listing.docID"
           :disabled="true"
           placeholder="ล็อตที่ได้รับ"
         />
@@ -24,41 +24,60 @@
         />
         <input
           type="text"
-          name="ปริมาณที่ได้รับ"
+          name="เกรด"
+          v-model="this.grade"
           :disabled="true"
-          v-model="this.listing.value"
-          placeholder="ปริมาณ"
+          placeholder="เกรด"
         />
-        <p>หมายเลขล็อต</p>
         <input
           type="text"
-          name="เลขล็อต"
+          name="ปริมาณที่ได้รับ"
+          v-model="this.listing.value"
           :disabled="true"
-          v-model="lotID"
-          placeholder="หมายเลขล็อต"
+          placeholder="ปริมาณ"
         />
-        <h2>เตรียมเมล็ด</h2>
-        <p>วัน/เดือน/ปี เตรียมเมล็ด</p>
+        <p>หมายเลขเอกสาร</p>
+        <input
+          type="text"
+          name="หมายเลขเอกสาร"
+          :disabled="true"
+          v-model="docID"
+          placeholder="หมายเลขเอกสาร"
+        />
+        <h2>คั่ว</h2>
+        <p>วัน/เดือน/ปี</p>
         <input
           type="date"
           name="ว/ด/ป"
-          v-model="millingDate"
+          v-model="roastDate"
           placeholder="ว/ด/ป"
           value="2021-03-10"
         />
-        <p>วิธีทำ</p>
-        <select id="Prepare" name="Prepare" v-model="Prepare" form="Prepare">
-          <option value="เตรียมแบบแห้ง">เตรียมแบบแห้ง</option>
-          <option value="เตรียมแบบเปียก">เตรียมแบบเปียก</option>
+        <p>ระดับการคั่ว</p>
+        <select id="roast" name="roast" v-model="roast_lv" form="roast">
+          <option value="Light">คั่วอ่อน</option>
+          <option value="Medium">คั่วปานกลาง</option>
+          <option value="Dark">คั่วเข้ม</option>
         </select>
         <p>ปริมาณ</p>
-        <input v-model="value" type="text" name="ปริมาณ" placeholder="ปริมาณ" />
+        <input
+          v-model="value"
+          type="text"
+          name="ปริมาณ"
+          placeholder="ปริมาณ"
+        />
+        <p>วัน/เดือน/ปี หมดอายุ</p>
+        <input
+          type="date"
+          name="ว/ด/ป"
+          v-model="roastExp"
+          placeholder="ว/ด/ป"
+          value="2021-03-10"
+        />
       </div>
-
+    
       <div class="input">
-        <div class="next"  v-on:click="recordData()">
-          <i class="material-icons nav__icon">arrow_forward</i>
-        </div>
+          <div class="next" v-on:click="recordData()"><i class="material-icons nav__icon">arrow_forward</i></div>
       </div>
     </section>
   </div>
@@ -66,31 +85,30 @@
 <script>
 import axios from "axios";
 import moment from 'moment';
-
-// if ( this.$store.state.milling.lotID == '') {
-//    this.$store.state.milling.lotID = moment(new Date()).format('YYYYMMDDhmm')+'1'+this.$store.state.user
-// }
 export default {
-  name: "milling2",
+  name: "school2",
   data() {
     return {
-      lotID: moment(new Date()).format('YYYYMMDDhmm')+'1'+localStorage.getItem('LoggedUser'),
-      millingDate: this.$store.state.milling.millingDate,
-      Prepare: this.$store.state.milling.Prepare,
-      value: this.$store.state.milling.value,
+      docID: moment(new Date()).format('YYYYMMDDhmm')+'2'+localStorage.getItem('LoggedUser'),
+      roastDate: this.$store.state.school.roastDate,
+      roastExp: this.$store.state.school.roastExp,
+      roast_lv: this.$store.state.school.roast_lv,
+      value: this.$store.state.school.value,
+      grade: this.$route.query.id.slice(-1),
       listing: {},
+      info: ''
     };
   },
   computed: {
     user() {
       return this.$store.state.user;
     },
-    milling() {
-      return this.$store.state.milling;
+    school() {
+      return this.$store.state.school;
     },
   },
   created() {
-    console.log("current user", this.user, this.$route.query.id,this.$store.state.token);
+    console.log("current user", this.user, this.$route.query.id);
     // POST request using axios with set headers
     const headers = {
       Authorization: localStorage.getItem('token'),
@@ -98,33 +116,32 @@ export default {
     };
     axios
       .get(
-        this.$store.state.url.milling+`api/v1/getData/${this.$route.query.id}`,
+        this.$store.state.url.school+`api/v1/getData/${this.$route.query.id}`,
         { headers }
       )
       .then((res) => {
         this.listing = res.data;
         console.log(this.listing);
       })
-      .catch((err) =>  {
-          this.$router.push("/");
-          alert("คุณไม่มีสิทธิ์ กรุณา Login",err);
-      });
+      .catch((err) => alert(err));
   },
   methods: {
     recordData() {
       // POST request using axios with set headers
-      // this.$store.commit('setLotID', this.lotID)
+      // this.$store.commit('setdocID', this.docID)
       // console.log(data);
-      this.$store.commit("setMilling", {
-        ...this.milling,
-        receiveLotID:this.listing.lotID,
+      this.$store.commit("setschool", {
+        ...this.school,
+        receivedocID:this.listing.docID,
         species:this.listing.species,
-        lotID: this.lotID,
-        millingDate: this.millingDate,
-        Prepare: this.Prepare,
+        docID: this.docID,
+        grade: this.grade,
         value: this.value,
+        roast_Date: this.roastDate,
+        roastExp: this.roastExp,
+        roast_lv: this.roast_lv,
       });
-        console.log(this.$store.state.milling);
+        console.log(this.$store.state.school);
 
       // axios
       //   .post("http://165.232.173.183:3000/api/v1/createData", data, {
@@ -134,7 +151,7 @@ export default {
       //   })
       //   .then((res) => {
       //     if (res.status == 200) {
-      this.$router.replace({ path: "/milling3" });
+      this.$router.replace({ path: "/school3" });
       //       }
       //     });
     },
@@ -155,14 +172,14 @@ header i {
   font-size: 30px;
   color: #000;
 }
-.box {
-  width: 100%;
-  background-color: #dadada;
-  height: 50px;
-  border: 1px solid black;
-  text-align: left;
-  padding: 12px 20px;
-  margin: 15px 0px 5px 0px;
+.box{
+    width: 100%;
+    background-color: #dadada;
+    height: 50px;
+    border: 1px solid black;
+    text-align: left;
+    padding: 12px 20px;
+    margin: 15px 0px 5px 0px;
 }
 section {
   margin: 0 auto;
@@ -212,14 +229,15 @@ button {
   height: 53px;
   font-size: 25px;
   font-weight: bold;
-  display: flex;
+   display: flex;
   align-items: center;
-  justify-content: center;
+   justify-content: center;
 }
-.next .nav__icon {
-  text-decoration: none;
-  color: #fff;
-  font-size: 40px;
-  margin: 10px auto;
+.next .nav__icon{
+    text-decoration: none;
+    color: #fff;
+    font-size: 40px;
+    margin: 10px auto;
 }
+
 </style>

@@ -10,10 +10,10 @@
     </div>
     <section>
       <h2>การคั่ว/บรรจุ</h2>
-      <p>หมายเลขล็อต : {{lotID}}</p>
-      <p>สายพันธุ์ : {{stow.species}}</p>
-      <p>เกรด : {{stow.grade}}</p>
-      <p>ปริมาณ : {{stow.species}}</p>
+      <p>หมายเลขเอกสาร : {{docID}}</p>
+      <p>สายพันธุ์ : {{school.species}}</p>
+      <p>เกรด : {{school.grade}}</p>
+      <p>ปริมาณ : {{school.species}}</p>
     </section>
     
     <div class="button">
@@ -31,14 +31,14 @@ export default {
     VueQrcode,
   },
   computed: {
-    lotID () {
-      return this.$store.state.lotID
+    docID () {
+      return this.$store.state.docID
     },
-    stow () {
-      return this.$store.state.stow
+    school () {
+      return this.$store.state.school
     },
     url(){
-      return this.$store.state.url.stow+`api/v1/buyerReceiveData/${this.$store.state.lotID}`
+      return this.$store.state.url.school+`api/v1/buyerReceiveData/${this.$store.state.docID}`
     }
     },
 

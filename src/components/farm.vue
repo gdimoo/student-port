@@ -20,7 +20,7 @@
             ทั่วไป
           </button>
           <button class="tag" @click="(crop = true), (general = false)">
-            เก็บเกี่ยว
+            นักเรียน
           </button>
         </div>
         <div v-if="general">
@@ -28,11 +28,11 @@
           <p>ที่อยู่ : {{ this.$store.state.location.farmLocation }}</p>
         </div>
         <div v-if="crop">
-          <p>หมายเลขล็อต : {{ this.$store.state.farm.lotID }}</p>
+          <p>หมายเลขเอกสาร : {{ this.$store.state.farm.docID }}</p>
           <p>
             ส่วนผสมในดิน/สารเคมีที่ใช้ : {{ this.$store.state.farm.fertilizer }}
           </p>
-          <p>ส่งต่อ : {{ this.$store.state.milling.millingUser }}</p>
+          <p>ส่งต่อ : {{ this.$store.state.cert.certUser }}</p>
         </div>
       </div>
     </transition>
@@ -48,9 +48,9 @@ export default {
       name: "ไร่",
       company: this.$store.state.farm.farmer,
       address: this.$store.state.location.farmLocation,
-      number: this.$store.state.farm.lotID,
+      number: this.$store.state.farm.docID,
       soil: this.$store.state.farm.fertilizer,
-      For: this.$store.state.milling.lotID,
+      For: this.$store.state.cert.docID,
     };
   },
   methods: {

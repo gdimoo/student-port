@@ -1,4 +1,4 @@
-# coffee-trace
+# student-portfolio
 
 ## Project setup
 ```

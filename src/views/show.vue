@@ -7,11 +7,11 @@
     </div>
     <header>
       <div class="image">
-        <img src="../assets/product.svg" alt="scan" />
+        <img src="../assets/school.svg" alt="scan" />
       </div>
     </header>
     <section>
-      <!-- {{ JSON.parse(JSON.stringify(this.listing.other)).stowUser }} -->
+      <!-- {{ JSON.parse(JSON.stringify(this.listing.other)).schoolUser }} -->
       <h3>{{ name }}</h3>
       <div>
         <h4>{{ company }}</h4>
@@ -38,7 +38,6 @@
       </div>
       <div><p>การเดินทางของสินค้า :</p></div>
       <h1 v-if="this.$store.state.location.farmLocation.length > 0">
-        <GoogleMap />
       </h1>
       <h1 v-else>กำลังโหลด</h1>
       <farm />
@@ -53,14 +52,12 @@ import axios from "axios";
 import farm from "@/components/farm.vue";
 import mill from "@/components/mill.vue";
 import production from "@/components/production.vue";
-import GoogleMap from "@/components/GoogleMap.vue";
 export default {
   name: "show",
   components: {
     farm,
     mill,
     production,
-    GoogleMap,
   },
   data() {
     return {
@@ -80,13 +77,13 @@ export default {
     console.log("current user", this.user, this.$route.query.id);
     await axios
       .get(
-        this.$store.state.url.stow +
+        this.$store.state.url.school +
           `api/v1/buyerReceiveData/${this.$route.query.id}`
       )
       .then(async (res) => {
         this.listing = res.data;
         this.name = JSON.parse(this.listing.other).infoData.info.name;
-        // this.company = JSON.parse(this.listing.other.stowUser),
+        // this.company = JSON.parse(this.listing.other.schoolUser),
         (this.type = this.listing.species),
           (this.roast = JSON.parse(this.listing.other).infoData.roast_lv),
           (this.grade = JSON.parse(this.listing.other).grade),
@@ -94,21 +91,21 @@ export default {
           (this.guide = JSON.parse(this.listing.other).infoData.info.guide),
           this.$store.commit("setLocation", {
             ...this.$store.state.location,
-            stowLocation: JSON.parse(this.listing.other).locationStow,
-            stowLotID: this.listing.lotID,
-            millLotID: JSON.parse(this.listing.other).infoData.receiveLotID,
+            schoolLocation: JSON.parse(this.listing.other).locationschool,
+            schooldocID: this.listing.docID,
+            milldocID: JSON.parse(this.listing.other).infoData.receivedocID,
           });
-        this.$store.commit("setStow", {
-          ...this.$store.state.stow,
-          receiveLotID: JSON.parse(this.listing.other).infoData.receiveLotID,
+        this.$store.commit("setschool", {
+          ...this.$store.state.school,
+          receivedocID: JSON.parse(this.listing.other).infoData.receivedocID,
           species: this.listing.species,
-          lotID: this.listing.lotID,
+          docID: this.listing.docID,
           grade: JSON.parse(this.listing.other).grade,
           value: 0,
           roast_Date: JSON.parse(this.listing.other).roast_Date,
           roastExp: JSON.parse(this.listing.other).roastExp,
           roast_lv: JSON.parse(this.listing.other).roast_lv,
-          stowUser: JSON.parse(this.listing.other).stowUser,
+          schoolUser: JSON.parse(this.listing.other).schoolUser,
           info: {
             name: JSON.parse(this.listing.other).infoData.info.name,
             packDate: JSON.parse(this.listing.other).infoData.info.packDate,
@@ -121,45 +118,45 @@ export default {
         console.log(this.listing);
         await axios
           .get(
-            this.$store.state.url.stow +
-              `api/v1/buyerReceiveData/${this.$store.state.location.millLotID}`
+            this.$store.state.url.school +
+              `api/v1/buyerReceiveData/${this.$store.state.location.milldocID}`
           )
           .then(async (res) => {
             this.listing = res.data;
             this.$store.commit("setLocation", {
               ...this.$store.state.location,
               millLocation: JSON.parse(this.listing.other).locationMill,
-              farmLotID: JSON.parse(this.listing.other).millingData
-                .receiveLotID,
+              farmdocID: JSON.parse(this.listing.other).certData
+                .receivedocID,
             });
-            this.$store.commit("setMilling", {
-              ...this.$store.state.milling,
-              receiveLotID: JSON.parse(this.listing.other).millingData
-                .receiveLotID,
+            this.$store.commit("setcert", {
+              ...this.$store.state.cert,
+              receivedocID: JSON.parse(this.listing.other).certData
+                .receivedocID,
               species: this.listing.species,
-              millingUser: JSON.parse(this.listing.other).millingUser,
-              lotID: this.listing.lotID,
-              millingDate: JSON.parse(this.listing.other).millingData
-                .millingDate,
-              Prepare: JSON.parse(this.listing.other).millingData.Prepare,
+              certUser: JSON.parse(this.listing.other).certUser,
+              docID: this.listing.docID,
+              certDate: JSON.parse(this.listing.other).certData
+                .certDate,
+              Prepare: JSON.parse(this.listing.other).certData.Prepare,
               value: this.listing.value,
-              milling_grade_Date: JSON.parse(this.listing.other).millingData
-                .milling_grade_Date,
+              cert_grade_Date: JSON.parse(this.listing.other).certData
+                .cert_grade_Date,
               grade: {
-                gradeLotID: JSON.parse(this.listing.other).millingData.grade
-                  .gradeLotID,
-                millingExp: JSON.parse(this.listing.other).millingData.grade
-                  .millingExp,
-                value: JSON.parse(this.listing.other).millingData.grade.value,
-                Detail: JSON.parse(this.listing.other).millingData.grade.Detail,
-                grade: JSON.parse(this.listing.other).millingData.grade.grade,
+                gradedocID: JSON.parse(this.listing.other).certData.grade
+                  .gradedocID,
+                certExp: JSON.parse(this.listing.other).certData.grade
+                  .certExp,
+                value: JSON.parse(this.listing.other).certData.grade.value,
+                Detail: JSON.parse(this.listing.other).certData.grade.Detail,
+                grade: JSON.parse(this.listing.other).certData.grade.grade,
               },
             });
-            this.locationStow = JSON.parse(this.listing.other).locationStow;
+            this.locationschool = JSON.parse(this.listing.other).locationschool;
             await axios
               .get(
-                this.$store.state.url.stow +
-                  `api/v1/buyerReceiveData/${this.$store.state.location.farmLotID}`
+                this.$store.state.url.school +
+                  `api/v1/buyerReceiveData/${this.$store.state.location.farmdocID}`
               )
               .then((res) => {
                 this.listing = res.data;
@@ -171,21 +168,21 @@ export default {
                 this.$store.commit("setFarm", {
                   ...this.$store.state.farm,
                   species: this.listing.species,
-                  harvestDate: JSON.parse(this.listing.other).farm.harvestDate,
+                  study_reportDate: JSON.parse(this.listing.other).farm.study_reportDate,
                   fertilizer: JSON.parse(this.listing.other).farm.fertilizer,
                   method: JSON.parse(this.listing.other).farm.method,
                   farmer: JSON.parse(this.listing.other).farm.farmer,
-                  lotID: this.listing.lotID,
+                  docID: this.listing.docID,
                   value: this.listing.value,
                 });
-                this.locationStow = JSON.parse(this.listing.other).locationStow;
+                this.locationschool = JSON.parse(this.listing.other).locationschool;
               })
               .catch((err) => alert(err));
           })
           .catch((err) => alert(err));
       })
       .catch((err) => alert(err));
-    console.log("coffee-trace :", this.$store.state.location);
+    console.log("student-portfolio :", this.$store.state.location);
   },
 };
 </script>

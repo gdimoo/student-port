@@ -1,67 +1,34 @@
 <template>
-  <div class="login-harvest">
-     <header>
-     <nav>
-      <div class="logo"> <router-link to="#">LOGO</router-link></div>
-     </nav>
-    <p>Coffee Bean Trace</p>
-   </header>
-    <!-- <form action="/action_page.php" method="post"> -->
-    <!-- <div class="imgcontainer">
-      <img src="img_avatar2.png" alt="Avatar" class="avatar" />
-    </div> -->
+  <div class="login-teacher">
+
         <div class="title">
-            <img src="../assets/harvest.svg" alt="เก็บเกี่ยว">
-            <h3>เก็บเกี่ยว</h3>
+            <img src="../assets/diploma.svg" alt="diploma">
+            <h3>สถาบันฝึกอบรม</h3>
         </div>
     <div class="container">
-        
-<dropdown class="my-dropdown-toggle"
-          :options="arrayOfObjects" 
-          :selected="object" 
-          v-on:updateOption="methodToRunOnSelect" 
-          :placeholder="'เลือกผู้ใช้'"
-          :closeOnOutsideClick="true">
-</dropdown>
 
-      <!-- <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="ID" name="uname" required>
+      <googleLogin />
 
-    <br><label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Password" name="psw" required> -->
 
-      <!-- <br><button v-on:click="login()">Login</button> -->
-      <br><button @click="login()">Login</button>
     </div>
-    <!-- </form> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import dropdown from 'vue-dropdowns';
+import googleLogin from "./google-signin";
 
 export default {
-  name: "login-harvest",
-  data(){
-    return{
-arrayOfObjects: [{
-                name: 'farmer1',
-            },
-            {
-                name: 'farmer2',
+  name: "login-training",
+  components: {                googleLogin,
 
-            }],
-            object: {
-              name: this.user,
-            }
+
+  },
+  created(){
+        if (localStorage.getItem("LoggedUser")) {
+      this.$router.replace({ path: "/training" });
     }
-  },
-  components: {            'dropdown': dropdown,
-
-  },
-        created(){
-          this.object = this.$store.state.user
+          this.$store.commit('setType', 'training')
         },
   computed: {
     user () {
@@ -82,10 +49,10 @@ arrayOfObjects: [{
       //   "My-Custom-Header": "foobar"
       // };
       let urlUser = this.$store.state.url.farmer;
-      if (this.user === "milling1") {
-        urlUser = this.$store.state.url.milling;
-      } else if (this.user === "stow1") {
-        urlUser = this.$store.state.url.stow;
+      if (this.user === "cert1") {
+        urlUser = this.$store.state.url.cert;
+      } else if (this.user === "school1") {
+        urlUser = this.$store.state.url.school;
       }
       axios
         .post(urlUser + "login", { username: this.user })
@@ -96,12 +63,12 @@ arrayOfObjects: [{
             localStorage.setItem("LoggedUser", this.user);
             console.log("login    ", localStorage.getItem("LoggedUser"));
             localStorage.setItem("token", token);
-            this.$router.replace({ path: "/produc" });
+            this.$router.replace({ path: "/school" });
           }
         })
         .catch((err) => alert(err)
         );
-      // this.$router.replace({ path: '/harvest1' });
+      // this.$router.replace({ path: '/study_report1' });
     },
   }
 }
@@ -138,10 +105,6 @@ p{
   text-align: center;
 }
 
-form {
-  border: 3px solid #f1f1f1;
-}
-
 .title{
     margin: 20px;
     text-align: center;
@@ -149,7 +112,7 @@ form {
     font-size: 20px;
 }
 .title img{
-    width: 200px;
+    width: 150px;
 }
 
 button {

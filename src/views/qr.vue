@@ -9,8 +9,8 @@
       <vue-qrcode :value="url" />
     </div>
     <section>
-      <h2>การเก็บเกี่ยว</h2>
-      <p>หมายเลขล็อต : {{ lotID }}</p>
+      <h2>การนักเรียน</h2>
+      <p>หมายเลขเอกสาร : {{ docID }}</p>
       <p>สายพันธุ์ : {{ farm.species }}</p>
       <p>เกรด : -</p>
       <p>ปริมาณ : {{ farm.value }}</p>
@@ -31,8 +31,8 @@ export default {
     VueQrcode,
   },
   computed: {
-    lotID() {
-      return this.$store.state.lotID;
+    docID() {
+      return this.$store.state.docID;
     },
     farm() {
       return this.$store.state.farm;
@@ -41,8 +41,8 @@ export default {
       // if (this.listing.owner.include(this.$store.state.user)) {
 
       return (
-        this.$store.state.url.milling +
-        `api/v1/receiveData/${this.$store.state.lotID}`
+        this.$store.state.url.cert +
+        `api/v1/receiveData/${this.$store.state.docID}`
       );
       // } else {
       //   return ''
@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      // url: `http://165.232.173.183:4000/api/v1/receiveData/${this.$store.state.lotID}`
+      // url: `http://165.232.173.183:4000/api/v1/receiveData/${this.$store.state.docID}`
     };
   },
   created() {

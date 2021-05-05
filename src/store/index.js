@@ -6,57 +6,58 @@ Vue.prototype.moment = moment
 Vue.use(Vuex)
 
 const state = {
-  user: '',
-  lotID: '',
+  user: localStorage.getItem('LoggedUser') || '',
+  docID: '',
+  type: localStorage.getItem('type') || '',
   token: localStorage.getItem('token') || '',
   url:{
-    farmer:"https://farmer.coffee-trace.cf/",
-    milling:"https://milling.coffee-trace.cf/",
-    stow:"https://stow.coffee-trace.cf/",
-    main:"https://coffee-trace.cf"
+    farmer:"http://localhost:5000/",
+    cert:"http://localhost:4000/",
+    school:"http://localhost:3000/",
+    main:"http://localhost:8080/"
   },
   farm:{
     species: "",
-      harvestDate: "",
+      study_reportDate: "",
       fertilizer: "",
       method: "",
-        lotID: "",
+        docID: "",
         value: 0,
         farmer:""
   },
   showDetail:{
     farm: false,
       mill: false,
-      stow: false,
+      school: false,
   },
-  milling:{
-    receiveLotID:"",
+  cert:{
+    receivedocID:"",
     species:"",
-    lotID: "",
-    millingDate: "",
+    docID: "",
+    certDate: "",
     Prepare: "",
     value: 0,
-    millingUser:"",
-    milling_grade_Date:"",
+    certUser:"",
+    cert_grade_Date:"",
     grade:{
-      gradeLotID:"",
-      millingExp:"",
+      gradedocID:"",
+      certExp:"",
       value:"",
       Detail:"",
       grade:""
 
     }
   },
-  stow:{
-    receiveLotID:"",
+  school:{
+    receivedocID:"",
     species:"",
-    lotID: "",
+    docID: "",
     grade:"",
     value: 0,
     roast_Date:"",
     roastExp:"",
     roast_lv:"",
-    stowUser:"",
+    schoolUser:"",
 
     info:{
       name:"",
@@ -70,11 +71,11 @@ const state = {
   },
   location:{
     farmLocation:"",
-    farmLotID:"",
+    farmdocID:"",
     millLocation:"",
-    millLotID:"",
-    stowLocation:"",
-    stowLotID:"",
+    milldocID:"",
+    schoolLocation:"",
+    schooldocID:"",
   }
 }
 
@@ -86,14 +87,17 @@ const mutations ={
   setFarm: (state, farm) => {
     state.farm = farm
   },  
-  setStow: (state, stow) => {
-    state.stow = stow
+  setSchool: (state, school) => {
+    state.school = school
   },  
-  setMilling: (state, milling) => {
-    state.milling = milling
+  setCert: (state, cert) => {
+    state.cert = cert
+  },    
+  setType: (state, type) => {
+    state.type = type
   },  
-  setLotID: (state, lotID) => {
-    state.lotID = lotID
+  setDocID: (state, docID) => {
+    state.docID = docID
   },
   setLocation: (state, location) => {
     state.location = location
@@ -114,11 +118,12 @@ const mutations ={
 
 const getters = {
   user: state => state.user,
-  lotID: state => state.lotID,
-  milling: state => state.milling,
-  farm: state => state.milling,
-  stow: state => state.milling,
+  docID: state => state.docID,
+  cert: state => state.cert,
+  farm: state => state.cert,
+  school: state => state.cert,
   url: state => state.url,
+  type: state => state.type,
   farmerList: state => state.farmerList,
   token: state => state.token,
   location: state => state.location,

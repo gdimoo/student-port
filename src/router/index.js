@@ -34,34 +34,22 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+    component: () => import('../views/login.vue')
   },
   {
-    path: '/login-stow',
-    name: 'login-stow',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/login-stow.vue')
+    path: '/login-training',
+    name: 'login-training',
+    component: () => import('../views/login-training.vue')
   },
   {
-    path: '/login-harvest',
-    name: 'login-harvest',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/login-harvest.vue')
+    path: '/login-student',
+    name: 'login-student',
+    component: () => import('../views/login-student.vue')
   },
   {
-    path: '/login-milling',
-    name: 'login-milling',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/login-milling.vue')
+    path: '/login-teacher',
+    name: 'login-teacher',
+    component: () => import('../views/login-teacher.vue')
   },
   {
     path: '/check',
@@ -71,43 +59,57 @@ const routes = [
   },
   {
     path: '/reader',
+    beforeEnter : guardMyroute,
     name: 'reader',
     component: () => import('../views/qrcode-reader.vue')
   },
   {
-    path: '/qr',
+    path: '/school',
     beforeEnter : guardMyroute,
-    name: 'qr',
-    component: () => import('../views/qr.vue')
+    name: 'school',
+    component: () => import('../views/school.vue')
   },
   {
-    path: '/qr-Rongsi',
-    name: 'qr-Rongsi',
+    path: '/training',
     beforeEnter : guardMyroute,
-    component: () => import('../views/qr-Rongsi.vue')
+    name: 'training',
+    component: () => import('../views/training.vue')
   },
   {
-    path: '/qr-stow',
-    name: 'qr-stow',
+    path: '/study_report1',
     beforeEnter : guardMyroute,
-    component: () => import('../views/qr-stow.vue')
+    name: 'study_report1',
+    component: () => import('../views/study-report1.vue')
   },
   {
-    path: '/produc',
-    name: 'produc',
-    component: () => import('../views/produc.vue')
+    path: '/study_report2',
+    beforeEnter : guardMyroute,
+    name: 'study_report2',
+    component: () => import('../views/study-report2.vue')
   },
   {
-    path: '/harvest1',
+    path: '/student',
     beforeEnter : guardMyroute,
-    name: 'harvest1',
-    component: () => import('../views/harvest1.vue')
+    name: 'student',
+    component: () => import('../views/student.vue')
   },
   {
-    path: '/harvest2',
+    path: '/participate',
     beforeEnter : guardMyroute,
-    name: 'harvest2',
-    component: () => import('../views/harvest2.vue')
+    name: 'participate',
+    component: () => import('../views/participate.vue')
+  },
+  {
+    path: '/add-student',
+    beforeEnter : guardMyroute,
+    name: 'add-student',
+    component: () => import('../views/add-student.vue')
+  },
+  {
+    path: '/add-member',
+    beforeEnter : guardMyroute,
+    name: 'add-member',
+    component: () => import('../views/add-member.vue')
   },
   {
     path: '/dropdown',
@@ -115,46 +117,34 @@ const routes = [
     component: () => import('../views/dropdown.vue')
   },
   {
-    path: '/milling1',
+    path: '/cert1',
     beforeEnter : guardMyroute,
-    name: 'milling1',
-    component: () => import('../views/Milling1.vue')
+    name: 'cert1',
+    component: () => import('../views/cert1.vue')
   },
   {
-    path: '/milling2',
+    path: '/cert2',
     beforeEnter : guardMyroute,
-    name: 'milling2',
-    component: () => import('../views/Milling2.vue')
+    name: 'cert2',
+    component: () => import('../views/cert2.vue')
   },
   {
-    path: '/milling3',
+    path: '/school1',
     beforeEnter : guardMyroute,
-    name: 'milling3',
-    component: () => import('../views/Milling3.vue')
+    name: 'school1',
+    component: () => import('../views/school1.vue')
   },
   {
-    path: '/milling4',
+    path: '/school2',
     beforeEnter : guardMyroute,
-    name: 'milling4',
-    component: () => import('../views/Milling4.vue')
+    name: 'school2',
+    component: () => import('../views/school2.vue')
   },
   {
-    path: '/stow1',
+    path: '/school3',
     beforeEnter : guardMyroute,
-    name: 'stow1',
-    component: () => import('../views/stow1.vue')
-  },
-  {
-    path: '/stow2',
-    beforeEnter : guardMyroute,
-    name: 'stow2',
-    component: () => import('../views/stow2.vue')
-  },
-  {
-    path: '/stow3',
-    beforeEnter : guardMyroute,
-    name: 'stow3',
-    component: () => import('../views/stow3.vue')
+    name: 'school3',
+    component: () => import('../views/school3.vue')
   },
   {
     path: '/show',

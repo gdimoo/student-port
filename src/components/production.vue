@@ -6,12 +6,12 @@
     <transition name="fade" appear>
       <div
         class="modal-overlay"
-        v-if="this.$store.state.showDetail.stow"
+        v-if="this.$store.state.showDetail.school"
         v-on:click="update(false)"
       ></div>
     </transition>
     <transition name="slide" appear>
-      <div class="modal" v-if="this.$store.state.showDetail.stow">
+      <div class="modal" v-if="this.$store.state.showDetail.school">
         <button class="close" @click="update(false)">
           <i class="material-icons nav__icon">close</i>
         </button>
@@ -20,14 +20,14 @@
         <button class="tag" @click="Pack = true, general = false">การคั่ว/บรรจุ</button>
         </div>
         <div v-if="general">
-        <p>ชื่อบริษัท : {{this.$store.state.stow.stowUser}}</p>
-        <p>ที่อยู่ : {{this.$store.state.location.stowLocation}}</p>
+        <p>ชื่อบริษัท : {{this.$store.state.school.schoolUser}}</p>
+        <p>ที่อยู่ : {{this.$store.state.location.schoolLocation}}</p>
         </div>
         <div v-if="Pack">
-        <p>หมายเลขล็อต : {{this.$store.state.location.stowLotID}}</p>
-        <p>ระดับการคั่ว : {{this.$store.state.stow.roast_lv}}</p>
-        <p>วันบรรจุ : {{this.$store.state.stow.info.packDate}}</p>
-        <p>วันหมดอายุ : {{this.$store.state.stow.info.expDate}}</p>
+        <p>หมายเลขเอกสาร : {{this.$store.state.location.schooldocID}}</p>
+        <p>ระดับการคั่ว : {{this.$store.state.school.roast_lv}}</p>
+        <p>วันบรรจุ : {{this.$store.state.school.info.packDate}}</p>
+        <p>วันหมดอายุ : {{this.$store.state.school.info.expDate}}</p>
         </div>
       </div>
     </transition>
@@ -53,7 +53,7 @@ export default {
       update(show) {
       this.$store.commit("setShowDetail", {
         ...this.$store.state.showDetail,
-        stow: show,
+        school: show,
       });
     },
   }

@@ -20,7 +20,7 @@
               <h2>ชื่อขั้นตอน</h2>
               <div class="input">
                 <div class="text">
-                  <h4>หมายเลขล็อต : {{this.listing.lotID}}</h4>
+                  <h4>หมายเลขเอกสาร : {{this.listing.docID}}</h4>
                   <h4>สายพันธุ์ : {{this.listing.species}}</h4>
                   <h4>เกรด : -</h4>
                   <h4>ปริมาณ : {{this.listing.value}} ก.ก.</h4>
@@ -80,22 +80,22 @@ export default {
           console.log(res);
           this.listing = res.data;
         console.log(this.listing);
-        if (result.includes('milling') && this.listing.owner.includes('farmer')) {
+        if (result.includes('cert') && this.listing.owner.includes('farmer')) {
   console.log('2mill');
       this.dialog = true
         }else if (result.includes('buyerReceiveData')) {
           console.log('buyer');
-            this.$router.push('/show?id=' +  this.listing.lotID);
+            this.$router.push('/show?id=' +  this.listing.docID);
       
         }
-        else if (result.includes('stow') && this.listing.owner.includes('milling')) {
-          console.log('2stow');
+        else if (result.includes('school') && this.listing.owner.includes('cert')) {
+          console.log('2school');
       this.dialog = true
         }
         
         else {
         alert('ไม่สามารถรับข้อมูลได้ เนื่องจากรายการนี้ได้ถูกส่งต่อไปแล้ว')
-            this.$router.push("/produc");
+            this.$router.push("/school");
 
         }
         this.camera = !this.dialog;
@@ -120,15 +120,15 @@ export default {
       axios
         .get(this.result+'/1', { headers })
         .then((res) => {
-          console.log(res,this.listing.lotID);
-          if (this.result.includes('milling.coffee')) {
+          console.log(res,this.listing.docID);
+          if (this.result.includes('cert.coffee')) {
             console.log('transfer2m');
-          this.$router.push('/milling2?id=' + this.listing.lotID);
+          this.$router.push('/cert2?id=' + this.listing.docID);
             
-          } else if (this.result.includes('stow.coffee')){
+          } else if (this.result.includes('school.coffee')){
             console.log('transfer2s');
 
-          this.$router.push('/stow2?id=' + this.listing.lotID);
+          this.$router.push('/school2?id=' + this.listing.docID);
             
           }
 

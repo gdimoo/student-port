@@ -20,15 +20,15 @@
         <button class="tag" @click="mill = true, general = false">การสี/คัดเกรด</button>
         </div>
         <div v-if="general">
-        <p>ชื่อบริษัท : {{this.$store.state.milling.millingUser}}</p>
+        <p>ชื่อบริษัท : {{this.$store.state.cert.certUser}}</p>
         <p>ที่อยู่ : {{this.$store.state.location.millLocation}}</p>
         </div>
         <div v-if="mill">
-        <p>หมายเลขล็อต : {{this.$store.state.location.millLotID}}</p>
-        <p>เตรียมเมล็ด : {{this.$store.state.milling.Prepare}}</p>
-        <p>เกรด : {{this.$store.state.milling.grade.grade}}</p>
-        <p>รายละเอียด : {{this.$store.state.milling.grade.Detail}}</p>
-        <p>ส่งต่อ : {{this.$store.state.stow.stowUser}}</p>
+        <p>หมายเลขเอกสาร : {{this.$store.state.location.milldocID}}</p>
+        <p>เตรียมเมล็ด : {{this.$store.state.cert.Prepare}}</p>
+        <p>เกรด : {{this.$store.state.cert.grade.grade}}</p>
+        <p>รายละเอียด : {{this.$store.state.cert.grade.Detail}}</p>
+        <p>ส่งต่อ : {{this.$store.state.school.schoolUser}}</p>
         </div>
       </div>
     </transition>
@@ -41,8 +41,8 @@ export default {
     return {
       general:true,
       mill:false,
-      name: "โรงสี",
-      company:"โรงสีนายอ่ำ",
+      name: "โรงเรียน",
+      company:"โรงเรียนนายอ่ำ",
       address:"ตำบลเวียง อำเภอเทิง เชียงราย 57160 ",
       number:"123456789",
       prepare:"แบบเปียก",

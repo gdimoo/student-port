@@ -10,14 +10,14 @@
     </div>
     <section>
       <h2>การสี</h2>
-      <p>หมายเลขล็อต : {{lotID}}</p>
-      <p>สายพันธุ์ : {{milling.species}}</p>
-      <p>เกรด : {{milling.grade.grade}}</p>
-      <p>ปริมาณ : {{milling.grade.value}}</p>
+      <p>หมายเลขเอกสาร : {{docID}}</p>
+      <p>สายพันธุ์ : {{cert.species}}</p>
+      <p>เกรด : {{cert.grade.grade}}</p>
+      <p>ปริมาณ : {{cert.grade.value}}</p>
     </section>
     
     <div class="button">
-      <router-link to="/milling3">
+      <router-link to="/cert3">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </div>
@@ -31,14 +31,14 @@ export default {
     VueQrcode,
   },
   computed: {
-    lotID () {
-      return this.$store.state.lotID
+    docID () {
+      return this.$store.state.docID
     },
-    milling () {
-      return this.$store.state.milling
+    cert () {
+      return this.$store.state.cert
     },
     url(){
-      return this.$store.state.url.stow+`api/v1/receiveData/${this.$store.state.lotID}`
+      return this.$store.state.url.school+`api/v1/receiveData/${this.$store.state.docID}`
     }
     },
 

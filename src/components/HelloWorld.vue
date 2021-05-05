@@ -5,7 +5,7 @@
         <li><router-link to="/login">login</router-link></li>
         <li><router-link to="/login">ข้อมูลส่วนตัว</router-link></li>
         <li><router-link to="/login">SCAN</router-link></li>
-        <li><router-link to="/produc">การผลิต</router-link></li>
+        <li><router-link to="/school">การผลิต</router-link></li>
         <li><router-link to="/" class="active">Home</router-link></li>
       </ul>
     </div>

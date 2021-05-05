@@ -22,10 +22,10 @@ export default {
                 name: 'farmer2',
             },
             {
-                name: 'milling1',
+                name: 'cert1',
             },
             {
-                name: 'stow1',
+                name: 'school1',
             }],
             object: {
               name: this.user,

@@ -1,36 +1,34 @@
 <template>
-
-
-  <div id="app">
+  <div id="app" >
+      <nav>
+        <a href="#" class="brand-logo">Student Portfolio</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul v-if="!user" id="nav-mobile" class="right hide-on-med-and-down">
+        <li><router-link to="/login-student">เข้าสู่ระบบนักเรียน</router-link></li>
+        <li><router-link to="/login-teacher">เข้าสู่ระบบโรงเรียน</router-link></li>
+        <li><router-link to="/login-training">เข้าสู่ระบบสถาบันฝึกอบรม</router-link></li>
+      </ul>
+      <ul v-else id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a @click="managePage()">จัดการข้อมูล
+        </a></li>
+        <li><a @click="handleLogout()">ออกจากระบบ
+        </a></li>
+      </ul>
+      </nav>
+      
     <router-view />
-    <nav class="nav"
-    :class="{ 'navbar--hidden': !showNavbar }">
-      <router-link to="/Home" class="nav__link active">
-        <i class="material-icons nav__icon">home</i>
-        <span class="nav__text">Home</span>
-      </router-link>
-      <router-link to="/produc" class="nav__link">
-        <i class="material-icons nav__icon">add_business</i>
-        <span class="nav__text">การผลิต</span>
-      </router-link>
-      <router-link to="/reader" class="nav__link">
-        <i class="material-icons nav__icon">qr_code_scanner</i>
-        <span class="nav__text">SCAN</span>
-      </router-link>
-      <router-link to="#" class="nav__link">
-        <i class="material-icons nav__icon">contact_page</i>
-        <span class="nav__text">ข้อมูล {{this.$store.state.token?this.$store.state.user:''}}</span>
-      </router-link>
-    </nav>
   </div>
 </template>
 <script>
+import { resetState } from "@/store/index.js";
+
 export default {
-  name: "stow3",
+  name: "App",
   data () {
     return {
       showNavbar: true,
-      lastScrollPosition: 0
+      lastScrollPosition: 0,
+      user:this.$store.state.user
     }
   },
 
@@ -50,7 +48,21 @@ methods: {
     }
     this.showNavbar = currentScrollPosition < this.lastScrollPosition
     this.lastScrollPosition = currentScrollPosition
-  }
+  },
+  handleLogout() {
+    this.auth2.signOut();
+      localStorage.clear();
+      resetState();
+    console.log('App :',this.$store.state.token);
+    location.reload()
+            
+    },
+    managePage(){
+this.$router.push('/' +  this.$store.state.type);
+    }
+
+  },
+  created(){
 
   }
 }

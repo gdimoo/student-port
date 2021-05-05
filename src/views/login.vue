@@ -1,30 +1,71 @@
 <template>
   <div class="login">
-    <header>
-      <nav>
-        <div class="logo"><router-link to="#">LOGO</router-link></div>
-      </nav>
-      <p>Coffee Bean Trace</p>
+    <header class="splash">
+        <div class="splash-inner">
+            <i class="fas fa-torii-gate"></i>
+            <h1 class="page-title">Student Portfolio</h1>
+            <h2 class="page-subtitle">แฟ้มสะสมผลงานบนเครือข่ายบล็อกเชน</h2>
+        </div>
     </header>
-
-    <!-- </form> -->
-    <div class="space">
-      <router-link to="/login-harvest">login-harvest</router-link>
-      <br /><router-link to="/login-milling">login-milling</router-link>
-      <br /><router-link to="/login-stow">login-stow</router-link>
-      <br /><GoogleLogin
-        :params="params"
-        :onSuccess="onSuccess"
-        :onFailure="onFailure"
-        >Login</GoogleLogin
-      >
-    </div>
+    
+    <section class="intro">
+        <div class="container">
+            <p>
+            บล็อกเชนเป็นเทคโนโลยีจัดเก็บข้อมูลแบบกระจายศูนย์ ในการจัดเก็บข้อมูลดิจิทัลจะบันทึกผ่านเครื่องคอมพิวเตอร์จำนวนมาก การเก็บข้อมูลแบบบล็อกเชนมีจุดมุ่งหมายเพื่อสร้างสภาพแวดล้อมที่กระจายอำนาจโดยไม่มีคนกลางควบคุม 
+	ซึ่งแฟ้มสะสมผลงานในรูปแบบบล็อกเชนบนระบบ Hyperledger Fabric จะช่วยรับรองข้อมูลว่าไม่ถูกปลอมแปลง
+            </p>
+        </div>
+    </section>
+    
+    <section class="skills">
+        <div class="container">
+            <h2 class="">หน่วยงานที่เกี่ยวข้อง</h2>
+            <article class="skill-left">
+                <div class="skill-image">
+                    <img src="https://image.freepik.com/free-photo/book-with-green-board-background_1150-3837.jpg">
+                </div>
+                <div class="skill-description">
+                    <h3 class="skill-title">สถาบันการศึกษา</h3>
+                    <p>บันทึกข้อมูลผลการศึกษา โดยข้อมูลจะไม่ถูกปลอมแปลง ทั้งยังติดตามประวัติของข้อมูลได้อย่างมั่นใจ
+                    </p>
+                </div>
+            </article> 
+           
+            
+            <article class="skill-right">
+                <div class="skill-image">
+                    <img src="https://image.freepik.com/free-photo/african-american-ceo-giving-presentation-corporate-team-meeting-concept_1163-4880.jpg">
+                </div>
+                <div class="skill-description">
+                    <h3 class="skill-title">สถาบันอบรม</h3>
+                    <p>บันทึกข้อมูลการอบรม โดยข้อมูลจะไม่ถูกปลอมแปลง ทั้งยังติดตามประวัติของข้อมูลได้อย่างมั่นใจ
+                    </p>
+                </div>
+            </article>
+            <article class="skill-left">
+                <div class="skill-image">
+                    <img id="image-crop" src="https://image.freepik.com/free-photo/company-representatives-reading-applicant-resume-hiring_1163-4684.jpg">
+                </div>
+                <div class="skill-description">
+                    <h3 class="skill-title">หน่วยงานทั่วไป</h3>
+                    <p>สะดวก รวดเร็ว ในการดูแฟ้มสะสมผลงานในรูปแบบออนไลน์ ทั้งยังรับรองความถูกต้องของข้อมูลด้วยระบบเครือข่ายบล็อกเชน
+                    </p>
+                </div>
+            </article>           
+        </div>
+    </section>
+  
+    
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>&#169; Siripra Kingchan. All right reserved. Designed by www.freepik.com</p>
+        </div>
+    </footer>
   </div>
 </template>
 
 <script>
-import GoogleLogin from "vue-google-login";
-import axios from "axios";
 // import dropdown from
 export default {
   name: "post-request-set-headers",
@@ -43,150 +84,306 @@ export default {
       },
     };
   },
-  components: {
-    GoogleLogin,
-  },
-  computed: {
-    user() {
-      return this.$store.state.user;
-    },
-  },
-  methods: {
-    onSuccess(googleUser) {
-      console.log(googleUser);
-
-      // This only gets the user information: id, name, imageUrl and email
-      console.log(googleUser.getBasicProfile());
-    },
-    login() {
-      console.log("cur user to login", this.user);
-      // POST request using axios with set headers
-      // const headers = {
-      //   "Authorization": this.user,
-      //   "My-Custom-Header": "foobar"
-      // };
-      let urlUser = this.$store.state.url.farmer;
-      if (this.user === "milling1") {
-        urlUser = this.$store.state.url.milling;
-      } else if (this.user === "stow1") {
-        urlUser = this.$store.state.url.stow;
-      }
-      axios
-        .post(urlUser + "login", { username: this.user })
-        .then((res) => {
-          if (res.data !== "Wrong username") {
-            console.log(res.data);
-            const token = res.data;
-            localStorage.setItem("LoggedUser", this.user);
-            console.log("login    ", localStorage.getItem("LoggedUser"));
-            localStorage.setItem("token", token);
-            this.$router.replace({ path: "/produc" });
-          }
-        })
-        .catch((err) => alert(err));
-      // this.$router.replace({ path: '/harvest1' });
-    },
-  },
 };
 </script>
 
-<style scoped>
-header {
-  width: 100%;
-  height: 200px;
-  margin: 0 auto;
-  background: url("../assets/coffee.jpg") no-repeat;
-  background-position: center;
-}
-nav {
-  height: 100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-nav a {
-  text-decoration: none;
-  color: #f0d9a5;
-}
-
-.logo {
-  margin-left: 5%;
-  font-size: 30px;
-  font-weight: bold;
-}
-p {
-  color: #f0d9a5;
-  font-size: 28px;
-  font-weight: bold;
-  text-align: center;
-}
-
-form {
-  border: 3px solid #f1f1f1;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 20rem;
-  padding: 12px 20px;
-  margin: 0.5em;
-  display: inline-block;
-  border: 1px solid #ccc;
+<style scoped>/* Global */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-button {
-  background-color: #81542d;
-  border-radius: 20px;
-  color: white;
-  margin-top: 50px;
-  border: none;
-  cursor: pointer;
-  width: 90%;
-  height: 55px;
-  max-width: 370px;
-  font-size: 25px;
-  font-weight: bold;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-.imgcontainer {
+body {
+  margin: 0;
   text-align: center;
-  margin: 24px 0 12px 0;
-}
-
-img.avatar {
-  width: 40%;
-  border-radius: 50%;
+  background: #f1f2f6;
+  color: #2f3542;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .container {
-  margin-top: 60px;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+section {
+  padding: 108px;
+}
+
+.section-title {
+  position: relative;
+  font-family: "Bebas Neue", cursive;
+  font-size: 36px;
+  margin: 0 0 60px 0;
+}
+
+.section-title::after {
+  background: #ff6348;
+  position: absolute;
+  content: "";
+  bottom: -12px;
+  left: 50%;
+  width: 50px;
+  height: 8px;
+  transform: translateX(-50%);
+}
+
+/* Splash */
+.splash {
+  height: 100vh;
+  position: relative;
+  background-image: url('../assets/graduates.png');
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.splash-inner {
+  position: absolute;
+  margin: 0px 50px 0px 50px;;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* if child needs to be at center of parent horisontaly and verticaly then 
+     parent {position: relative} and 
+     child {position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);} */
+}
+
+.splash i {
+  font-size: 30px;
+  background: #ff6348;
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  color: #f1f2f6;
+  border-radius: 50%;
+}
+
+.page-title::after {
+  background: #ff6348;
+  position: absolute;
+  content: "";
+  bottom: -24px;
+  left: 50%;
+  width: 110px;
+  height: 8px;
+  transform: translateX(-50%);
+}
+
+.page-title {
+  color: #f1f2f6;
+  /* font-family: "Bebas Neue", cursive; */
+  font-size: 60px;
+  margin: 48px 0 0 0;
+  position: relative;
+}
+
+.page-subtitle {
+  /* font-family: "Bebas Neue", cursive; */
+  color: #f1f2f6;
+  opacity: 0.8;
+  font-size: 30px;
+  letter-spacing: 0.1em;
+  text-shadow: 2px 2px 1px #ff6348;
+  margin: 48px 0 0 0;
+}
+
+/* Intro */
+.intro {
+  background: #f1f2f6;
+}
+
+.intro p {
+  width: 70%;
+  margin: 0 auto;
+  padding: 48px 0;
+  font-size: 20px;
+  border-top: 1px solid #ff6348;
+  border-bottom: 1px solid #ff6348;
+}
+
+/* About */
+.about {
+  background: #dfe4ea;
+}
+
+/* Skills */
+[class^=skill-] {
+  position: relative;
+}
+
+.skill-image {
+  position: absolute;
+  z-index: 1;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.skill-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 1s;
+}
+
+.skill-right .skill-image {
+  right: 0;
+}
+
+.skill-right .skill-description {
+  padding: 36px 55% 36px 0;
+  text-align: right;
+  z-index: 0;
+}
+
+.skill-left .skill-description {
+  padding: 36px 0 36px 55%;
+  text-align: left;
+  z-index: 0;
+}
+
+.skill-image img:hover {
+  transform: scale(0.8);
+}
+
+/* Gallery */
+.gallery {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+.gallery .gallery-end {
+  padding: 40px 4px;
+  flex: 50%;
+}
+.gallery .gallery-end button {
+  font-family: "Bebas Neue", cursive;
+  font-size: 36px;
+  color: #f1f2f6;
+  background-color: #ff6348;
+  border: none;
+  border-radius: 2px;
+  padding: 12px 20px;
+}
+.gallery .gallery-end button:hover {
+  background-color: #2f3542;
+}
+
+.gallery-inner {
+  flex: 33.3%;
+  padding: 0 0px;
+  position: relative;
+}
+.gallery-inner:hover .overlay {
+  opacity: 1;
+}
+.gallery-inner .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
   align-items: center;
+  opacity: 0;
+  transition: 0.5s;
+}
+.gallery-inner .overlay h3 {
+  color: #f1f2f6;
+  font-family: "Bebas Neue", cursive;
+  font-size: 36px;
+  transform: translate(50%, -40%);
+}
+.gallery-inner .overlay button {
+  margin-top: 20px;
+  color: #f1f2f6;
+  font-family: "Bebas Neue", cursive;
+  font-size: 16px;
+  background-color: #ff6348;
+  border: none;
+  border-radius: 2px;
+  padding: 6px 10px;
+  transform: translate(-50%, 50%);
+}
+.gallery-inner .overlay button:hover {
+  background-color: #2f3542;
+}
+.gallery-inner img {
+  vertical-align: middle;
+  width: 100%;
+}
+.gallery-inner button {
+  color: #f1f2f6;
+  font-family: "Bebas Neue", cursive;
+  font-size: 36px;
+  background-color: #ff6348;
+  border: none;
+  border-radius: 1px;
+  padding: 12px 20px;
+}
+.gallery-inner button:hover {
+  background-color: #2f3542;
 }
 
-span.psw {
-  float: right;
-  padding-top: 16px;
+/* Clear floats after the columns*/
+.gallery:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
-.space {
-  height: 160px;
-  text-align: center;
+/* Contact Form */
+.contact {
+  background: #2f3542;
 }
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 500px) {
-  span.psw {
-    display: block;
-    float: none;
-  }
-  .cancelbtn {
-    width: 100%;
-  }
+
+.contact .contact-form {
+  border-radius: 2px;
+  background-color: inherit;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+input[type=text],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+input[type=submit] {
+  background-color: #ff6348;
+  color: #f1f2f6;
+  font-family: "Bebas Neue", cursive;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #f1f2f6;
+  color: #2f3542;
+}
+
+/* Footer */
+.page-footer {
+  background: #505a70;
+  color: #f1f2f6;
+  padding: 5px 5px;
 }
 </style>

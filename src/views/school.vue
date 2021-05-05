@@ -1,35 +1,25 @@
 <template>
   <div id="produc">
     <header>
-      <router-link to="/Home">
+      <router-link to="/">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
     <section>
-      <div class="harvest">
+      <div class="study_report">
       <div class="box_har"></div>
-      <router-link to="/harvest1"><h1>เก็บเกี่ยว</h1></router-link>
+      <router-link to="/study_report1"><h1>บันทึกผลการเรียน</h1></router-link>
     </div>
-    <div class="Milling">
+    <div class="cert">
       <div class="box_mil"></div>
-      <router-link to="/milling1"><h1>การสี</h1></router-link>
-    </div>
-    <div class="stow">
-      <div class="box_st"></div>
-      <router-link to="/stow1"><h1>คั่ว/บรรจุ</h1></router-link>
+      <router-link to="/student"><h1>ข้อมูลนักเรียน</h1></router-link>
     </div>
     </section>
   </div>
 </template>
 <script>
 export default {
-  name: "produc",
-  components: {},
-  methods: {
-    // Toharvest(){
-    //     this.$router.push({ name: 'harvest1' })
-    // }
-  },
+  name: "school",
 };
 </script>
 <style scoped>
@@ -69,7 +59,7 @@ section{
   margin: 0 auto;
 }
 
-.harvest{
+.study_report{
   height: 130px;
   width: 90%;
   border: 1px solid #A9D730;
@@ -83,7 +73,7 @@ section{
   background-color: #A9D730;
 }
 
-.Milling{
+.cert{
   height: 130px;
   width: 90%;
   border: 1px solid #EEAD00;
@@ -96,11 +86,11 @@ section{
   width: 50%;
   background-color: #EEAD00;
 }
-.Milling a h1{
+.cert a h1{
   left: 65%;
 }
 
-.stow{
+.school{
   height: 130px;
   width: 90%;
   border: 1px solid #E22E17;
