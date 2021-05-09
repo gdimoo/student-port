@@ -49,7 +49,8 @@ export default {
       console.log(googleUser.getBasicProfile());
       console.log("token", googleUser.getAuthResponse().id_token);
       const token = googleUser.getAuthResponse().id_token;
-      localStorage.setItem("LoggedUser", googleUser.getBasicProfile());
+      localStorage.setItem("LoggedUser", 
+      [googleUser.getBasicProfile().getId(),googleUser.getBasicProfile().getName()]);
       console.log("login    ", localStorage.getItem("LoggedUser"));
       localStorage.setItem("token", token);
       if (this.$store.state.type === 'school') {

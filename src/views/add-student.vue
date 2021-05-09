@@ -28,7 +28,7 @@
           type="text"
           name="ว/ด/ป"
           v-model="study_reportDate"
-          placeholder="ว/ด/ป"
+          placeholder="คำนำหน้าชื่อ"
           value="2021-03-10"
         />
         <p>ชื่อ-นามสกุล</p>
@@ -36,7 +36,7 @@
           type="text"
           name="ว/ด/ป"
           v-model="study_reportDate"
-          placeholder="ว/ด/ป"
+          placeholder="ชื่อ-นามสกุล"
           value="2021-03-10"
         />
         <p>วัน/เดือน/ปี เกิด</p>
@@ -44,7 +44,7 @@
           type="date"
           name="ว/ด/ป"
           v-model="study_reportDate"
-          placeholder="ว/ด/ป"
+          placeholder="วัน/เดือน/ปี เกิด"
           value="2021-03-10"
         />
       </div>

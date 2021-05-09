@@ -28,7 +28,4 @@ new Vue({
 
 Vue.GoogleAuth.then(auth2 => {
 Vue.prototype.auth2 = auth2;
-
-  console.log('check sugnin',auth2.isSignedIn.get());
-  console.log(auth2.currentUser.get())
 })

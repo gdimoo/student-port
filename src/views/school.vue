@@ -1,19 +1,13 @@
 <template>
   <div id="produc">
     <header>
-      <router-link to="/">
-        <i class="material-icons nav__icon">keyboard_backspace</i>
-      </router-link>
+
     </header>
     <section>
-      <div class="study_report">
-      <div class="box_har"></div>
-      <router-link to="/study_report1"><h1>บันทึกผลการเรียน</h1></router-link>
-    </div>
-    <div class="cert">
-      <div class="box_mil"></div>
-      <router-link to="/student"><h1>ข้อมูลนักเรียน</h1></router-link>
-    </div>
+<a href="/study_report1" class="study_report waves-effect waves-light btn-large"><i class="material-icons right">summarize</i><router-link to="/study_report1">ผลการเรียน</router-link></a>
+<a href="/student" class="cert waves-effect waves-light btn-large"><i class="material-icons right">people</i><router-link to="/student">ข้อมูลนักเรียน</router-link></a>
+<a href="/request" class="school waves-effect waves-light btn-large"><i class="material-icons right">pending_actions</i><router-link to="/student">คำขอรายงาน</router-link></a>
+
     </section>
   </div>
 </template>
@@ -42,13 +36,15 @@ header i{
 div a {
   text-decoration: none;
   color: #000;
+  align-items: center;
 }
-a h1{
+a {
   font-size: 20px;
   font-weight:inherit;
   position: absolute;
   top: 35%;
   right: 10%;
+  
 }
 
 section{
@@ -60,31 +56,35 @@ section{
 }
 
 .study_report{
+  
   height: 130px;
   width: 90%;
-  border: 1px solid #A9D730;
+  border: 1px solid #6ec2b1;
+  background-color: #6ec2b1;
   display: flex;
   position: relative;
+  align-items: center;
   margin-bottom: 30px;
 }
 .box_har{
   height: 130px;
   width: 50%;
-  background-color: #A9D730;
+  background-color: #6ec2b1;
 }
 
 .cert{
   height: 130px;
   width: 90%;
-  border: 1px solid #EEAD00;
+  border: 1px solid #95e3bb;
   display: flex;
+  background-color: #95e3bb;
   position: relative;
   margin-bottom: 30px;
 }
 .box_mil{
   height: 130px;
   width: 50%;
-  background-color: #EEAD00;
+  background-color: #95e3bb;
 }
 .cert a h1{
   left: 65%;
@@ -93,7 +93,8 @@ section{
 .school{
   height: 130px;
   width: 90%;
-  border: 1px solid #E22E17;
+  background-color: #ff545e;
+  border: 1px solid #ff545e;
   display: flex;
   position: relative;
   margin-bottom: 30px;
@@ -101,7 +102,7 @@ section{
 .box_st{
   height: 130px;
   width: 50%;
-  background-color: #E22E17;
+  background-color: #ff545e;
 }
 
 </style>

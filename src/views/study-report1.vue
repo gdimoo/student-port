@@ -46,8 +46,7 @@ export default {
     },
   },
   created() {
-    console.log("current user har1", this.$store.state.user, localStorage.getItem('token'));
-    // POST request using axios with set headers
+    console.log("login    ", localStorage.getItem("LoggedUser"));
     const headers = {
       Authorization: localStorage.getItem('token'),
       "My-Custom-Header": "foobar",

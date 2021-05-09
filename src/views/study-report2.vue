@@ -19,24 +19,39 @@
         <p>วัน/เดือน/ปี ที่บันทึกข้อมูล</p>
         <input
           type="date"
+          :disabled="true"
           name="ว/ด/ป"
-          v-model="study_reportDate"
+          v-model="recordDate"
           placeholder="ว/ด/ป"
-          value="2021-03-10"
         />
         <p>เลขบัตรประชาชนนักเรียน</p>
         <input
-          v-model="fertilizer"
+          v-model="owner"
           type="text"
           name="เลขบัตรประชาชนนักเรียน"
           placeholder="เลขบัตรประชาชนนักเรียน"
           
         />
+      
+        <p>ภาคการศึกษา</p>
+        <input
+          type="semester"
+          name="ภาคการศึกษา"
+          v-model="semester"
+          placeholder="ภาคการศึกษา"
+        />
+        <p>ปีการศึกษา</p>
+        <input
+          type="year"
+          name="ปีการศึกษา"
+          v-model="year"
+          placeholder="ปีการศึกษา"
+        />
       </div>
       <h2>ผลการศึกษา</h2>
        <form>
       <h1>รายวิชา</h1>
-      <div class="work-experiences">
+      <div class="report">
 
         <div class="form-row" v-for="(experience, index) in studyReports" :key="index">
           <div class="form-group col-md-6">
@@ -51,34 +66,14 @@
       </div>
 
       <div class="form-group">
-        <button @click="addExperience" type="button" class="btn btn-secondary">เพิ่มรายวิชา</button>
+        <button @click="addReport" type="button" class="btn btn-secondary">เพิ่มรายวิชา</button>
       </div>
       
       <hr>
-
-      <div class="form-group">
-        <button @click="submit" type="button" class="btn btn-primary">Submit</button>
-      </div>
     </form>
-      <div class="input">
-        <p>ภาคการศึกษา</p>
-        <input
-          type="number"
-          name="ปริมาณ"
-          v-model="value"
-          placeholder="ปริมาณ"
-        />
-        <p>ปีการศึกษา</p>
-        <input
-          type="number"
-          name="ปริมาณ"
-          v-model="value"
-          placeholder="ปริมาณ"
-        />
-      </div>
     </section>
     <div class="input">
-      <button @click="created()">บันทึกข้อมูล</button>
+      <button @click="recordData()">บันทึกข้อมูล</button>
     </div>
   </div>
 </template>
@@ -86,27 +81,22 @@
 import axios from "axios";
 import moment from "moment";
 
-// if ( this.$store.state.cert.docID == '') {
-//    this.$store.state.cert.docID = moment(new Date()).format('YYYYMMDDhmm')+'1'+this.$store.state.user
-// }
 export default {
-  name: "cert2",
+  name: "report2",
   data() {
     return {
       docID:
-        moment(new Date()).format("YYYYMMDDhmm") +
-        "1" +
-        localStorage.getItem("LoggedUser"),
-      certDate: this.$store.state.cert.certDate,
-      Prepare: this.$store.state.cert.Prepare,
-      value: this.$store.state.cert.value,
+        moment(new Date()).format("YYMMDD")+
+        localStorage.getItem("LoggedUser").split(',')[0],
+      recordDate: moment().format('YYYY-MM-DD'),
+      owner: this.$store.state.report.owner,
+      semester: this.$store.state.report.semester,
+      year: this.$store.state.report.year,
       listing: {},
-      studyReports: [
-      {
+      studyReports: [{
         subject: "",
         score: ""
-      }
-    ]
+      }],
     };
   },
   computed: {
@@ -115,7 +105,7 @@ export default {
     },
   },
   methods: {
-    addExperience () {
+    addReport () {
       this.studyReports.push({
         subject: '',
         score: ''
@@ -129,32 +119,44 @@ export default {
       alert(JSON.stringify(data, null, 2))
     },
     recordData() {
-      // POST request using axios with set headers
-      // this.$store.commit('setdocID', this.docID)
-      // console.log(data);
-      this.$store.commit("setcert", {
-        ...this.cert,
-        receivedocID: this.listing.docID,
-        species: this.listing.species,
-        docID: this.docID,
-        certDate: this.certDate,
-        Prepare: this.Prepare,
-        value: this.value,
-      });
-      console.log(this.$store.state.cert);
-
       axios
-        .post(this.$store.state.url.school+"api/v1/createReport", data, {
+        .post(this.$store.state.url.school+"api/v1/readData/"+this.owner, this.$store.state.report, {
           headers: {
             Authorization: this.user,
           },
         })
         .then((res) => {
-          if (res.status == 200) {
-            alert('บันทึกข้อมูลสำเร็จ')
-      this.$router.replace({ path: "/study_report1" });
+          if (res) {
+            console.log(res);
+            alert(res)
+      // this.$router.replace({ path: "/study_report1" });
             }
           });
+
+      // this.$store.commit("setReport", {
+      //   ...this.report,
+      //   docID: this.docID,
+      //   recordDate: this.recordDate,
+      // owner: this.owner,
+      // semester: this.semester,
+      // year: this.year,
+      // studyReports: JSON.stringify(this.studyReports, null, 2),
+      // });
+      // console.log(this.$store.state.report);
+      // console.log(this.$store.state.report);
+
+      // axios
+      //   .post(this.$store.state.url.school+"api/v1/createReport", this.$store.state.report, {
+      //     headers: {
+      //       Authorization: this.user,
+      //     },
+      //   })
+      //   .then((res) => {
+      //     if (res.status == 200) {
+      //       alert('บันทึกข้อมูลสำเร็จ')
+      // this.$router.replace({ path: "/study_report1" });
+      //       }
+      //     });
     },
   },
 };

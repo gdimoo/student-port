@@ -1,7 +1,7 @@
 <template>
   <div id="study_report1">
     <header>
-      <router-link to="/school">
+      <router-link to="/training">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>

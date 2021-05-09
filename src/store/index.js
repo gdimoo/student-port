@@ -11,24 +11,23 @@ const state = {
   type: localStorage.getItem('type') || '',
   token: localStorage.getItem('token') || '',
   url:{
-    farmer:"http://localhost:5000/",
-    cert:"http://localhost:4000/",
-    school:"http://localhost:3000/",
+    farmer:"http://139.59.230.32:5000/",
+    cert:"http://139.59.230.32:4000/",
+    school:"http://139.59.230.32:3000/",
     main:"http://localhost:8080/"
   },
-  farm:{
-    species: "",
-      study_reportDate: "",
-      fertilizer: "",
-      method: "",
-        docID: "",
-        value: 0,
-        farmer:""
+  report:{
+    docID: "",
+      recordDate:"",
+      semester:"",
+      year:"",
+      studyReports:"",
+    owner:""
   },
   showDetail:{
     farm: false,
       mill: false,
-      school: false,
+      report: false,
   },
   cert:{
     receivedocID:"",
@@ -48,34 +47,13 @@ const state = {
 
     }
   },
-  school:{
-    receivedocID:"",
-    species:"",
-    docID: "",
-    grade:"",
-    value: 0,
-    roast_Date:"",
-    roastExp:"",
-    roast_lv:"",
-    schoolUser:"",
-
-    info:{
-      name:"",
-      packDate:"",
-      expDate:"",
-      Detail:"",
-      guide:"",
-      packValue:""
-
-    }
-  },
   location:{
     farmLocation:"",
     farmdocID:"",
     millLocation:"",
     milldocID:"",
-    schoolLocation:"",
-    schooldocID:"",
+    reportLocation:"",
+    reportdocID:"",
   }
 }
 
@@ -87,8 +65,8 @@ const mutations ={
   setFarm: (state, farm) => {
     state.farm = farm
   },  
-  setSchool: (state, school) => {
-    state.school = school
+  setReport: (state, report) => {
+    state.report = report
   },  
   setCert: (state, cert) => {
     state.cert = cert
@@ -121,7 +99,7 @@ const getters = {
   docID: state => state.docID,
   cert: state => state.cert,
   farm: state => state.cert,
-  school: state => state.cert,
+  report: state => state.report,
   url: state => state.url,
   type: state => state.type,
   farmerList: state => state.farmerList,

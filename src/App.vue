@@ -1,7 +1,7 @@
 <template>
   <div id="app" >
       <nav>
-        <a href="#" class="brand-logo">Student Portfolio</a>
+        <a href="/" class="brand-logo">Student Portfolio</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul v-if="!user" id="nav-mobile" class="right hide-on-med-and-down">
         <li><router-link to="/login-student">เข้าสู่ระบบนักเรียน</router-link></li>
@@ -9,6 +9,7 @@
         <li><router-link to="/login-training">เข้าสู่ระบบสถาบันฝึกอบรม</router-link></li>
       </ul>
       <ul v-else id="nav-mobile" class="right hide-on-med-and-down">
+<li class="brown-text text-darken-4">ยินดีต้อนรับ คุณ {{user}}</li>
         <li><a @click="managePage()">จัดการข้อมูล
         </a></li>
         <li><a @click="handleLogout()">ออกจากระบบ
@@ -28,7 +29,7 @@ export default {
     return {
       showNavbar: true,
       lastScrollPosition: 0,
-      user:this.$store.state.user
+      user:localStorage.getItem("LoggedUser").split(',')[1]
     }
   },
 
