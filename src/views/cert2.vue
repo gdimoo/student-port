@@ -1,7 +1,7 @@
 <template>
   <div id="cert2">
     <header>
-      <router-link to="/participate">
+      <router-link to="/cert1">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
@@ -16,12 +16,12 @@
           v-model="docID"
           placeholder="หมายเลขเอกสาร"
         />
-        <p>วัน/เดือน/ปี ที่บันทึกข้อมูล</p>
+        <p>วัน/เดือน/ปี ที่ฝึกอบรม</p>
         <input
           type="date"
           name="ว/ด/ป"
           :disabled="true"
-          v-model="dateNow"
+          v-model="certDate"
           placeholder="ว/ด/ป"
         />
         <p>เลขบัตรประชาชนผู้เข้าอบรม</p>
@@ -36,11 +36,10 @@
 
         <p>ชื่อหลักสูตร</p>
         <input
-          type="date"
+          type="text"
           name="ชื่อหลักสูตร"
           v-model="course"
           placeholder="ชื่อหลักสูตร"
-          value="2021-03-10"
         />
         <p>ผู้ฝึกสอน</p>
         <input
@@ -65,18 +64,11 @@ export default {
     return {
       docID:
         moment(new Date()).format("YYYYMMDDhmm") +
-        localStorage.getItem("LoggedUser"),
-      certDate: this.$store.state.cert.certDate,
-      Prepare: this.$store.state.cert.Prepare,
-      value: this.$store.state.cert.value,
-      listing: {},
-      dateNow: moment().format('YYYY-MM-DD'),
-      studyReports: [
-      {
-        วิชา: "",
-        คะแนน: ""
-      }
-    ]
+        localStorage.getItem("LoggedUser").split(',')[0],
+      certDate:  moment().format('YYYY-MM-DD'),
+      course: "",
+      idCard: "",
+      trainer: "",
     };
   },
   created(){
@@ -100,17 +92,13 @@ export default {
       alert(JSON.stringify(data, null, 2))
     },
     recordData() {
-      // POST request using axios with set headers
-      // this.$store.commit('setdocID', this.docID)
-      // console.log(data);
-      this.$store.commit("setcert", {
-        ...this.cert,
-        receivedocID: this.listing.docID,
-        species: this.listing.species,
+
+      this.$store.commit("setCert", {
         docID: this.docID,
+        owner: this.idCard,
         certDate: this.certDate,
-        Prepare: this.Prepare,
-        value: this.value,
+        course: this.course,
+        trainer: this.trainer,
       });
       console.log(this.$store.state.cert);
 

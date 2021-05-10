@@ -14,10 +14,10 @@
       </div>
     </div>
     <section>
-      <h1 v-if="this.farmerData.length > 0">
+      <h1 v-if="this.reportData.length > 0">
         <div
           class="content"
-          v-for="item in this.farmerData"
+          v-for="item in this.reportData"
           :key="item.docID"
         >
         <p>หมายเลขเอกสาร : {{ (item.docID) }}</p>
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       listing: [],
-      farmerData: [],
+      reportData: [],
     };
   },
   computed: {
@@ -55,15 +55,13 @@ export default {
       .get(this.$store.state.url.farmer + "api/v1/readData", { headers })
       .then((res) => {
         this.listing = res.data;
-        // this.listing = JSON.stringify(this.listing).replace(/\\/g, '')
-        // console.log((this.listing),this.listing.length);
+
         this.listing.forEach(record => {
-          // console.log(record.Record)
-          if (record.Record.docID.includes('0'+localStorage.getItem('LoggedUser'))) {
-            this.farmerData.push(record.Record)
+          if (record.Record.category.includes('transcript')) {
+            this.reportData.push(record.Record)
           }
           });
-          console.log(this.farmerData);
+          console.log(this.reportData);
         if (res.status == 401) {
           this.$router.replace({ path: "/login" });
         }
@@ -72,7 +70,7 @@ export default {
         console.log(err.response.status);
         if (err.response.status === 401) {
           this.$router.push("/school");
-          alert("คุณไม่มีสิทธิ์ในส่วนการนักเรียน");
+          alert("คุณไม่มีสิทธิ์ในจัดการข้อมูลในโรงเรียน");
           
         }
       });

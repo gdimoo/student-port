@@ -1,95 +1,25 @@
 <template>
   <div id="study_report2">
     <header>
-      <router-link to="/study_report1">
+      <router-link to="/">
         <i class="material-icons nav__icon">keyboard_backspace</i>
       </router-link>
     </header>
     <section>
-      <h2>ข้อมูลเบื้องต้น</h2>
+      <h5>กรอกรหัสที่ได้รับจากนักเรียน เพื่อยืนยันสิทธิ์ในการดูเอกสาร</h5>
       <div class="input">
-        <p>หมายเลขเอกสาร</p>
+        <p>รหัสมอบสิทธิ์ในการดูเอกสาร</p>
         <input
           type="text"
-          name="หมายเลขเอกสาร"
-          :disabled="true"
-          v-model="docID"
-          placeholder="หมายเลขเอกสาร"
+          name="รหัสมอบสิทธิ์ในการดูเอกสาร"
+          v-model="transferToken"
+          placeholder="รหัสมอบสิทธิ์ในการดูเอกสาร"
         />
-        <p>วัน/เดือน/ปี ที่บันทึกข้อมูล</p>
-        <input
-          type="date"
-          :disabled="true"
-          name="ว/ด/ป"
-          v-model="recordDate"
-          placeholder="ว/ด/ป"
-        />
-        <p>เลขบัตรประชาชนนักเรียน</p>
-        <input
-          v-model="owner"
-          type="text"
-          name="เลขบัตรประชาชนนักเรียน"
-          placeholder="เลขบัตรประชาชนนักเรียน"
-        />
+  </div>
 
-        <p>ภาคการศึกษา</p>
-        <input
-          type="semester"
-          name="ภาคการศึกษา"
-          v-model="semester"
-          placeholder="ภาคการศึกษา"
-        />
-        <p>ปีการศึกษา</p>
-        <input
-          type="year"
-          name="ปีการศึกษา"
-          v-model="year"
-          placeholder="ปีการศึกษา"
-        />
-      </div>
-      <h2>ผลการศึกษา</h2>
-      <form>
-        <h1>รายวิชา</h1>
-        <div class="report">
-          <div
-            class="form-row"
-            v-for="(experience, index) in studyReports"
-            :key="index"
-          >
-            <div class="form-group col-md-6">
-              <label>วิชา</label>
-              <input
-                v-model="experience.subject"
-                :name="`studyReports[${index}][subject]`"
-                type="text"
-                class="form-control"
-                placeholder="ชื่อรายวิชา"
-              />
-            </div>
-            <div class="form-group col-md-6">
-              <label>คะแนน</label>
-              <input
-                v-model="experience.score"
-                :name="`studyReports[${index}][score]`"
-                type="text"
-                class="form-control"
-                placeholder="คะแนน"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <button @click="addReport" type="button" class="btn btn-secondary">
-            เพิ่มรายวิชา
-          </button>
-        </div>
-
-        <hr />
-      </form>
     </section>
     <div class="input">
-      <button @click="recordData()">บันทึกข้อมูล</button>
+      <button class="waves-effect waves-light btn-large" @click="recordData()">ยืนยันข้อมูล</button>
     </div>
   </div>
 </template>

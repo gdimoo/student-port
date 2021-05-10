@@ -33,8 +33,8 @@ const routes = [
   },
   {
     path: '/',
-    name: 'login',
-    component: () => import('../views/login.vue')
+    name: 'intro',
+    component: () => import('../views/intro.vue')
   },
   {
     path: '/login-training',
@@ -50,6 +50,16 @@ const routes = [
     path: '/login-teacher',
     name: 'login-teacher',
     component: () => import('../views/login-teacher.vue')
+  },
+  {
+    path: '/recieve',
+    name: 'recieve',
+    component: () => import('../views/recieve.vue')
+  },
+  {
+    path: '/request',
+    name: 'request',
+    component: () => import('../views/request.vue')
   },
   {
     path: '/check',
@@ -104,12 +114,6 @@ const routes = [
     beforeEnter : guardMyroute,
     name: 'add-student',
     component: () => import('../views/add-student.vue')
-  },
-  {
-    path: '/add-member',
-    beforeEnter : guardMyroute,
-    name: 'add-member',
-    component: () => import('../views/add-member.vue')
   },
   {
     path: '/dropdown',

@@ -48,7 +48,7 @@ export default {
             localStorage.setItem("LoggedUser", this.user);
             console.log("login    ", localStorage.getItem("LoggedUser"));
             localStorage.setItem("token", token);
-            this.$router.replace({ path: "/school" });
+            this.$router.replace({ path: "/" });
           }
         })
         .catch((err) => alert(err)

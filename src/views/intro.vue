@@ -7,7 +7,6 @@
             <h2 class="page-subtitle">แฟ้มสะสมผลงานบนเครือข่ายบล็อกเชน</h2>
         </div>
     </header>
-    
     <section class="intro">
         <div class="container">
             <p>
@@ -16,7 +15,11 @@
             </p>
         </div>
     </section>
-    
+    <div class="fixed-action-btn">
+  <a href="/recieve" class="btn-floating btn-large red">
+    <i  class="large material-icons">file_copy</i>
+  </a>
+</div>
     <section class="skills">
         <div class="container">
             <h2 class="">หน่วยงานที่เกี่ยวข้อง</h2>
