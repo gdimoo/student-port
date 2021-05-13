@@ -245,7 +245,7 @@ export default {
     },
     approve(item) {
       let url;
-      if (role == 'school') {
+      if (this.role == 'school') {
         url=this.$store.state.url.school;
       } else {
         url=this.$store.state.url.cert;

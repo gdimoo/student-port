@@ -52,13 +52,6 @@ const state = {
     transcript: "",
     certificate: "",
   },
-  cert:{
-    docID:"",
-    owner: "",
-    certDate: "",
-    course: "",
-    trainer: "",
-  },
 
 }
 
