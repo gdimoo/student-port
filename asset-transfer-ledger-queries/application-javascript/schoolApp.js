@@ -32,7 +32,6 @@ app.use((req, res, next) => {
 const CLIENT_ID =
 	"624928619172-6cq2g8hagvcaa5cmrql2jegiqe9ref1q.apps.googleusercontent.com"
 const { OAuth2Client } = require('google-auth-library');
-const { result } = require('lodash');
 const client = new OAuth2Client(CLIENT_ID);
 async function verify(token) {
 	const ticket = await client.verifyIdToken({
@@ -172,17 +171,6 @@ async function main(userId) {
 				const user = {
 					assetName: req.params.assetName
 				}
-				// console.log(user);
-				// let curUser = user.id;
-				// let nowContract = {};
-				// main(curUser);
-				// console.log('all gateway : ', allGateway);
-				// allGateway.forEach(gateway => {
-				// 	if (gateway.userId == curUser) {
-				// 		nowContract = gateway.contract;
-				// 		console.log('now', gateway.userId);
-				// 	}
-				// })
 
 				async function readData(assetName) {
 					console.log('\n--> Evaluate Transaction: ReadAsset, function returns information about an asset with ID ', assetName);
@@ -196,6 +184,30 @@ async function main(userId) {
 				}
 
 				readData(user.assetName)
+
+
+			})
+			app.get('/api/v1/approve/:assetName', (req, res) => {
+				const user = {
+					assetName: req.params.assetName
+				}
+				let curUser = (req.headers.authorization)
+				verify(curUser).then(email => {
+					console.log(email);
+					main(email);
+					console.log(allGateway);
+				})
+
+
+				async function receiveData(assetName) {
+					console.log('\n--> Submit Transaction: TransferAsset, transfer asset(asset2) to new owner(Tom)', assetName);
+					await nowContract.submitTransaction('TransferAsset', assetName);
+					console.log('*** Result: committed');
+					
+					res.send(200);
+				}
+
+				receiveData(user.assetName)
 
 
 			})
@@ -223,7 +235,7 @@ async function main(userId) {
 				console.log('test', data.studyReports);
 				async function createData(data) {
 					console.log('\n--> Submit Transaction: CreateAsset, creates new asset with lotID, species, harvestDate, and value arguments');
-					result = await nowContract.submitTransaction('CreateAsset', data.docID, data.category, data.owner, data.owner, JSON.stringify(data.information));
+					result = await nowContract.submitTransaction('CreateAsset', data.docID, data.category, data.owner, JSON.stringify(data.information));
 					console.log('*** Result: committed', result);
 					res.send(result)
 				}
@@ -254,7 +266,7 @@ async function main(userId) {
 					async function createData(data) {
 
 						console.log('\n--> Submit Transaction: CreateAsset, creates new asset with lotID, species, harvestDate, and value arguments');
-						result = await nowContract.submitTransaction('CreateAsset', data.docID, data.category, data.owner, data.owner, JSON.stringify(data.information));
+						result = await nowContract.submitTransaction('CreateAsset', data.docID, data.category, data.owner, JSON.stringify(data.information));
 						console.log('*** Result: committed', result);
 						res.send(result)
 					}

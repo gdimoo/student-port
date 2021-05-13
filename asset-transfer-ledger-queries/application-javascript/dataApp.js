@@ -18,7 +18,7 @@ const mspOrg3 = 'Org3MSP';
 const walletPath = path.join(__dirname, 'normal-wallet');
 const express = require('express');
 const cors = require('cors');
-const userId='normal';
+const userId = 'normal';
 
 // const web_url = 'http://localhost:8080'
 const web_url = 'http://coffee-trace.cf'
@@ -26,31 +26,19 @@ const app = express()
 const state = { isShutdown: false };
 
 const bodyParser = require("body-parser");
-	app.use(bodyParser.json());
-	const jwt = require("jwt-simple");
-	const passport = require("passport");
-	//ใช้ในการ decode jwt ออกมา
-	const ExtractJwt = require("passport-jwt").ExtractJwt;
-	//ใช้ในการประกาศ Strategy
-	const JwtStrategy = require("passport-jwt").Strategy;
-	const SECRET = "MY_SECRET_KEY";
-	//สร้าง Strategy
-	const jwtOptions = {
-		 jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-		 secretOrKey: SECRET
-	};
-	const studentUsers = '';
-	const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
-		console.log(payload);
-		 if (studentUsers.includes(payload.sub)) done(null, true);
-		 else done(null, false);
-	});
-	//เสียบ Strategy เข้า Passport
-	passport.use(jwtAuth);
-	//ทำ Passport Middleware
-	const requireJWTAuth = passport.authenticate("jwt",{session:false});
-	//ทำ Middleware สำหรับขอ JWT
-	
+app.use(bodyParser.json());
+const jwt = require("jwt-simple");
+const passport = require("passport");
+//ใช้ในการ decode jwt ออกมา
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+//ใช้ในการประกาศ Strategy
+const JwtStrategy = require("passport-jwt").Strategy;
+const SECRET = "MY_SECRET_KEY";
+//สร้าง Strategy
+const jwtOptions = {
+	jwtFromRequest: ExtractJwt.fromHeader("authorization"),
+	secretOrKey: SECRET
+};
 
 let nowContract = {};
 let allGateway = [];
@@ -58,8 +46,8 @@ let allGateway = [];
 app.use(express.json());
 app.use(cors());
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
 });
 
 app.get("/", (req, res) => {
@@ -89,7 +77,7 @@ async function main(userId) {
 
 		// in a real application this would be done only when a new user was required to be added
 		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient, wallet, mspOrg3, userId,'org2.department1');
+		await registerAndEnrollUser(caClient, wallet, mspOrg3, userId, 'org2.department1');
 
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for
@@ -129,14 +117,60 @@ async function main(userId) {
 
 			let result;
 
+			const loginMiddleWare = (req, res, next) => {
+				async function getData() {
+					console.log('\n--> Evaluate Transaction: GetAssetsByRange, function use an open start and open end range to return all');
+					let result = await contract.evaluateTransaction('ReadAsset', req.body.username).catch((err) => {
+						console.log("Timeout or other error: ", err)
+						res.send(err)
+					});
+					result = (prettyJSONString(result.toString()));
+					console.log('******************************studentUsers :', result);
+					if (result.includes(`"Profile"`)) next();
+					else res.send("ไม่พบผู้ใช้นี้ในระบบ");
+				}
+				getData()
+			};
+			const jwtAuth = new JwtStrategy(jwtOptions, (payload, done) => {
+				console.log(payload);
+				async function getData() {
+					console.log('\n--> Evaluate Transaction: GetAssetsByRange, function use an open start and open end range to return all');
+					let result = await contract.evaluateTransaction('ReadAsset', payload.sub ).catch((err) => {
+						console.log("Timeout or other error: ", err)
+						done(null, false)
+					});
+					result = (prettyJSONString(result.toString()));
+					console.log('******************************studentUsers :', result);
+					if (result.includes(payload.sub)) done(null, true);
+					else done(null, false);
+				}
+				getData()
+			});
 
-			app.get('/api/v1/readData' , (req, res) => {
+			//เสียบ Strategy เข้า Passport
+			passport.use(jwtAuth);
+			//ทำ Passport Middleware
+			const requireJWTAuth = passport.authenticate("jwt", { session: false });
+			//ทำ Middleware สำหรับขอ JWT
+
+
+			app.post("/login", loginMiddleWare, (req, res) => {
+				const payload = {
+					sub: req.body.username,
+					iat: new Date().getTime()
+				};
+				res.send(jwt.encode(payload, SECRET));
+
+			});
+
+
+			app.get('/api/v1/readData', (req, res) => {
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
-				split(".")[1], 'base64').toString()).sub
+					split(".")[1], 'base64').toString()).sub
 
 				console.log(curUser)
 				main(curUser);
-				
+
 
 				async function getData() {
 					console.log('\n--> Evaluate Transaction: GetAssetsByRange, function use an open start and open end range to return all');
@@ -148,12 +182,12 @@ async function main(userId) {
 			})
 
 
-			app.get('/api/v1/readDatabyOwner' , (req, res) => {
+			app.get('/api/v1/readDatabyOwner', (req, res) => {
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
-				split(".")[1], 'base64').toString()).sub
+					split(".")[1], 'base64').toString()).sub
 
 				main(curUser);
-				
+
 
 				async function getDataOwner() {
 					console.log('\n--> Evaluate Transaction: QueryAssetsByOwner, find all assets with owner(Michel)');
@@ -166,84 +200,50 @@ async function main(userId) {
 			})
 
 
-			app.post('/api/v1/createData' , (req, res) => {
+			app.post('/api/v1/createRequest', requireJWTAuth, (req, res) => {
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
-				split(".")[1], 'base64').toString()).sub
+					split(".")[1], 'base64').toString()).sub
 
 				console.log(curUser)
 				main(curUser);
-				
+
 
 				const data = {
-					lotID: String(req.body.lotID),
-					species: String(req.body.species),
-					value: String(req.body.value),
-					other: {
-						normalUser:curUser,
-    				grade:req.body.grade,
-						roast_Date:req.body.roast_Date,
-						roastExp:req.body.roastExp,
-						roast_lv:req.body.roast_lv,
-						infoData:req.body
+					docID: String(req.body.docID),
+					category: 'request',
+					owner: String(req.body.owner),
+					information: {
+						transcript: String(req.body.transcript),
+						certificate: String(req.body.certificate),
+						recordDate: String(req.body.recordDate)
 					}
 				}
+
 				console.log(data);
-				console.log(req.headers.authorization);
-				async function createData(assetName,data) {
-					console.log('\n--> Evaluate Transaction: ReadAsset, function returns information about an asset with ID(asset7)');
-					result = await nowContract.evaluateTransaction('ReadAsset', assetName);
-					console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-					const latlng = JSON.parse(prettyJSONString(result.toString())).species;
-					console.log(latlng);
-					data.other = {
-						...data.other,
-						locationnormal : latlng
-					}
+				async function createData(data) {
 					console.log(data);
 					console.log('\n--> Submit Transaction: CreateAsset, creates new asset with lotID, species, harvestDate, and value arguments');
-					result = await nowContract.submitTransaction('CreateAsset', data.lotID, data.species, data.value, JSON.stringify(data.other));
+					result = await nowContract.submitTransaction('CreateAsset', data.docID, data.category,  data.owner, JSON.stringify(data.information));
 					console.log('*** Result: committed', result);
 					res.send(result)
 				}
 
-				createData(curUser,data)
+				createData(data)
 
 			})
-			const loginMiddleWare = (req, res, next) => {
-				async function getData() {
-					console.log('\n--> Evaluate Transaction: GetAssetsByRange, function use an open start and open end range to return all');
-					let result = await contract.evaluateTransaction('ReadAsset', req.body.username).catch((err) => {
-						console.log("Timeout or other error: ", err)
-						res.send(err)
-					});
-					result= (prettyJSONString(result.toString()));
-					console.log('******************************studentUsers :' ,result);
-					if (result.includes(`"Profile"`)) next();
-					else res.send("ไม่พบผู้ใช้นี้ในระบบ");
-				}
-				getData()
-			};
-			
-			app.post("/login", loginMiddleWare, (req, res) => {
-				const payload = {
-					 sub: req.body.username,
-					 iat: new Date().getTime()
-				};
-				res.send(jwt.encode(payload, SECRET));
-				
-		 });
 
-			app.get('/api/v1/receiveData/:assetName/1', (req, res) => {
+
+			app.get('/api/v1/approve/:assetName', (req, res) => {
 				const user = {
 					// userId: req.headers.authorization,
 					assetName: req.params.assetName
 				}
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
-				split(".")[1], 'base64').toString()).sub
+					split(".")[1], 'base64').toString()).sub
 
 				console.log(curUser)
 				main(curUser);
-				
+
 
 				async function receiveData(assetName) {
 					console.log('\n--> Submit Transaction: TransferAsset, transfer asset(asset2) to new owner(Tom)', assetName);
@@ -251,7 +251,7 @@ async function main(userId) {
 					console.log('*** Result: committed');
 					res.send(200);
 				}
-				
+
 				receiveData(user.assetName)
 
 
@@ -274,8 +274,8 @@ async function main(userId) {
 					// res.location(307, web_url+'/show?id=' + assetName);
 				}
 
-						readData(user.assetName)
-					
+				readData(user.assetName)
+
 
 			})
 			app.get('/api/v1/getData/:assetName', (req, res) => {
@@ -284,11 +284,11 @@ async function main(userId) {
 					assetName: req.params.assetName
 				}
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
-				split(".")[1], 'base64').toString()).sub
+					split(".")[1], 'base64').toString()).sub
 
 				console.log(curUser)
 				main(curUser);
-				
+
 
 				async function readData(assetName) {
 					console.log('\n--> Evaluate Transaction: ReadAsset, function returns information about an asset with ID(asset7)');

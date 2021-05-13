@@ -9,7 +9,7 @@
 // peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["CreateAsset","asset2","red","50","Tom","150"]}'
 // peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["CreateAsset","asset3","blue","70","Tom","200"]}'
 // peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["TransferAsset","asset2","jerry"]}'
-// peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["TransferAssetsBasedOnColor","blue","jerry"]}'
+// peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["TransferAssetsBasedOnCategory","blue","jerry"]}'
 // peer chaincode invoke -C CHANNEL_NAME -n asset_transfer -c '{"Args":["DeleteAsset","asset1"]}'
 
 // ==== Query assets ====
@@ -80,7 +80,7 @@ class Chaincode extends Contract {
 
 		// ==== Create asset object and marshal to JSON ====
 		let asset = {
-			docType: 'asset',
+			docType: 'document',
 			docID: docID,
 			category: category,
 			creator: ctx.clientIdentity.getID(),
@@ -162,7 +162,7 @@ class Chaincode extends Contract {
 			jsonResp.error = 'Failed to decode JSON of: ' + assetName;
 			throw new Error(jsonResp);
 		}
-		assetToTransfer.owner = newOwner; //change the owner
+		assetToTransfer.creator = newOwner; //change the owner
 
 		let assetJSONasBytes = Buffer.from(JSON.stringify(assetToTransfer));
 		await ctx.stub.putState(assetName, assetJSONasBytes); //rewrite the asset
@@ -184,14 +184,14 @@ class Chaincode extends Contract {
 		return JSON.stringify(results);
 	}
 
-	// TransferAssetBasedOnColor will transfer assets of a given category to a certain new owner.
+	// TransferAssetBasedOnCategory will transfer assets of a given category to a certain new owner.
 	// Uses a GetStateByPartialCompositeKey (range query) against category~name 'index'.
 	// Committing peers will re-execute range queries to guarantee that result sets are stable
 	// between endorsement time and commit time. The transaction is invalidated by the
 	// committing peers if the result set has changed between endorsement time and commit time.
 	// Therefore, range queries are a safe option for performing update transactions based on query results.
 	// Example: GetStateByPartialCompositeKey/RangeQuery
-	async TransferAssetByColor(ctx, category, newOwner) {
+	async TransferAssetByCategory(ctx, category, newOwner) {
 		// Query the category~name index by category
 		// This will execute a key range query on all keys starting with 'category'
 		let categoryedAssetResultsIterator = await ctx.stub.getStateByPartialCompositeKey('category~name', [category]);
@@ -343,46 +343,22 @@ class Chaincode extends Contract {
 	async InitLedger(ctx) {
 		const assets = [
 			{
-				docID: 'asset1',
-				category: 'blue',
-				creator: 5,
+				docID: '1',
+				category: 'init',
 				owner: 'Tom',
 				information: 100
 			},
 			{
-				docID: 'asset2',
-				category: 'red',
-				creator: 5,
+				docID: '2',
+				category: 'init',
 				owner: 'Brad',
 				information: 100
 			},
 			{
-				docID: 'asset3',
-				category: 'green',
-				creator: 10,
+				docID: '3',
+				category: 'init',
 				owner: 'Jin Soo',
 				information: 200
-			},
-			{
-				docID: 'asset4',
-				category: 'yellow',
-				creator: 10,
-				owner: 'Max',
-				information: 200
-			},
-			{
-				docID: 'asset5',
-				category: 'black',
-				creator: 15,
-				owner: 'Adriana',
-				information: 250
-			},
-			{
-				docID: 'asset6',
-				category: 'white',
-				creator: 15,
-				owner: 'Michel',
-				information: 250
 			},
 		];
 
@@ -391,7 +367,6 @@ class Chaincode extends Contract {
 				ctx,
 				asset.docID,
 				asset.category,
-				asset.creator,
 				asset.owner,
 				asset.information
 			);
