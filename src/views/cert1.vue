@@ -16,16 +16,18 @@
     <section>
       <h1 v-if="this.certData.length > 0">
         <div
-          class="content"
+          class="collection"
           v-for="item in this.certData"
           :key="item.docID"
         >
-        <p>หมายเลขเอกสาร : {{ (item.docID) }}</p>
-          <p>ว/ด/ป ที่บันทึกข้อมูล : {{ JSON.parse(item.other).farm.study_reportDate }}</p>
-          <p>เอกสารของ : {{ (item.species) }}</p>
+        <!-- <p>หมายเลขเอกสาร : {{ (item.docID) }}</p> -->
+          <p>วัน/เดือน/ปี ที่ฝึกอบรม : {{ JSON.parse(item.information).certDate }}</p>
+          <p>ชื่อหลักสูตร : {{ JSON.parse(item.information).course }}</p>
+          <p>ผู้ฝึกสอน : {{ JSON.parse(item.information).trainer }}</p>
+          <p>เอกสารของ : {{ (item.owner) }}</p>
         </div>
       </h1>
-      <h2 v-else>ผู้ใช้ยังไม่การบันทึกข้อมูลการเรียน</h2>
+      <h2 v-else>ผู้ใช้ยังไม่มีบันทึกข้อมูลการฝึกอบรม</h2>
     </section>
   </div>
 </template>
@@ -53,7 +55,7 @@ export default {
       "My-Custom-Header": "foobar",
     };
     axios
-      .get(this.$store.state.url.farmer + "api/v1/readData", { headers })
+      .get(this.$store.state.url.cert + "api/v1/readData", { headers })
       .then((res) => {
         this.listing = res.data;
         // this.listing = JSON.stringify(this.listing).replace(/\\/g, '')
@@ -115,24 +117,28 @@ section {
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  width: 50%;
-  min-width: 300px;
+  font-size: 18px;
+  width: 60%;
+  
+}
+h1 {
+  min-width: 450px;
+  max-width: 600px;
 }
 section h2 {
   font-size: 18px;
   font-weight: 500;
 }
-.content {
+.collection{
   width: 100%;
-  height: 190px;
   background-color: #faeac6;
-  margin: 10px 0 10px 0;
 }
-.content p {
+.collection p {
   font-size: 18px;
   font-weight: lighter;
   margin: 0 0 5px 40px;
   padding-top: 5px;
+  line-height: normal;
 }
 
 .nav__icon {

@@ -6,7 +6,7 @@
       </router-link>
     </header>
     <section>
-        <h2>ข้อมูลเบื้องต้น</h2>
+      <h2>ข้อมูลเบื้องต้น</h2>
       <div class="input">
         <p>หมายเลขเอกสาร</p>
         <input
@@ -20,7 +20,6 @@
         <input
           type="date"
           name="ว/ด/ป"
-          :disabled="true"
           v-model="certDate"
           placeholder="ว/ด/ป"
         />
@@ -34,23 +33,23 @@
       </div>
       <h2>รายละเอียดการอบรม</h2>
 
-        <p>ชื่อหลักสูตร</p>
-        <input
-          type="text"
-          name="ชื่อหลักสูตร"
-          v-model="course"
-          placeholder="ชื่อหลักสูตร"
-        />
-        <p>ผู้ฝึกสอน</p>
-        <input
-          v-model="trainer"
-          type="text"
-          name="ผู้ฝึกสอน"
-          placeholder="ผู้ฝึกสอน"
-        />
+      <p>ชื่อหลักสูตร</p>
+      <input
+        type="text"
+        name="ชื่อหลักสูตร"
+        v-model="course"
+        placeholder="ชื่อหลักสูตร"
+      />
+      <p>ผู้ฝึกสอน</p>
+      <input
+        v-model="trainer"
+        type="text"
+        name="ผู้ฝึกสอน"
+        placeholder="ผู้ฝึกสอน"
+      />
     </section>
     <div class="input">
-      <button @click="created()">บันทึกข้อมูล</button>
+      <button @click="recordData()">บันทึกข้อมูล</button>
     </div>
   </div>
 </template>
@@ -64,35 +63,26 @@ export default {
     return {
       docID:
         moment(new Date()).format("YYYYMMDDhmm") +
-        localStorage.getItem("LoggedUser").split(',')[0],
-      certDate:  moment().format('YYYY-MM-DD'),
+        localStorage.getItem("LoggedUser").split(",")[0],
+      certDate: moment().format("YYYY-MM-DD"),
       course: "",
       idCard: "",
       trainer: "",
     };
   },
-  created(){
-      console.log('cert2',localStorage.getItem("LoggedUser"));
-
+  created() {
+    console.log("cert2", localStorage.getItem("LoggedUser"));
   },
   computed: {
     user() {
-      return this.$store.state.user;
+      return this.$store.state.token;
     },
     cert() {
       return this.$store.state.cert;
     },
   },
   methods: {
-
-    submit () {
-      const data = {
-        studyReports: this.studyReports
-      }
-      alert(JSON.stringify(data, null, 2))
-    },
     recordData() {
-
       this.$store.commit("setCert", {
         docID: this.docID,
         owner: this.idCard,
@@ -100,19 +90,24 @@ export default {
         course: this.course,
         trainer: this.trainer,
       });
-      console.log(this.$store.state.cert);
+      console.log('create cert ',this.$store.state.cert,this.user);
 
       axios
-        .post("http://165.232.173.183:3000/api/v1/createData", {
-          headers: {
-            Authorization: this.user,
-          },
-        })
+        .post(
+          this.$store.state.url.cert + "api/v1/createCert",
+          this.$store.state.cert,
+          {
+            headers: {
+              Authorization: this.user,
+            },
+          }
+        )
         .then((res) => {
           if (res.status == 200) {
-      this.$router.replace({ path: "/cert3" });
-            }
-          });
+            this.$router.replace({ path: "/cert1" });
+            alert("บันทึกข้อมูลสำเร็จ")
+          }
+        });
     },
   },
 };

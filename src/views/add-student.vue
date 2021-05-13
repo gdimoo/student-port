@@ -48,9 +48,7 @@
     <div class="input">
       <button @click="addStudent()">บันทึกข้อมูล</button>
     </div>
-    <!-- <div class="input">
-      <router-link to="/qr">QR Code</router-link>
-    </div> -->
+
   </div>
 </template>
 
@@ -85,9 +83,10 @@ export default {
           },
         })
         .then((res) => {
+          console.log(res);
           if (res.status == 200) {
             alert('เพิ่มข้อมูลสำเร็จ')
-            this.$router.replace({ path: "/study-report1" });
+            this.$router.replace({ path: "/student" });
           }
         }).catch((err) => {
         console.log(err.response.status);

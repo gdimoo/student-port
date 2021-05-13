@@ -4,7 +4,9 @@
 
     </header>
     <section>
-<a href="/cert1" class="study_report waves-effect waves-light btn-large"><i class="material-icons right">summarize</i><router-link to="cert1">การฝึกอบรม</router-link></a>
+<a href="/transcript" class="study_report waves-effect waves-light btn-large"><i class="material-icons right">summarize</i><router-link to="/transcript">ผลการเรียน</router-link></a>
+
+<a href="/certificate" class="cert waves-effect waves-light btn-large"><i class="material-icons right">summarize</i><router-link to="certificate">การฝึกอบรม</router-link></a>
 <a href="/request" class="school waves-effect waves-light btn-large"><i class="material-icons right">pending_actions</i><router-link to="request">คำขอรายงาน</router-link></a>
 
     </section>

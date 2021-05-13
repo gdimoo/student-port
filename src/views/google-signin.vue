@@ -55,18 +55,16 @@ export default {
       localStorage.setItem("token", token);
       if (this.$store.state.type === 'school') {
       localStorage.setItem("type", this.$store.state.type);
+            localStorage.setItem("role", "school");
 
       this.$router.replace({ path: "/school" });
         
       } else if(this.$store.state.type === 'training') {
       localStorage.setItem("type", this.$store.state.type);
+            localStorage.setItem("role", "training");
 
       this.$router.replace({ path: "/training" });
         
-      }
-      else{
-      this.$router.replace({ path: "/school" });
-
       }
       location.reload()
     },

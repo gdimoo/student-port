@@ -15,17 +15,17 @@
     </div>
     <section>
       <h1 v-if="this.studentData.length > 0">
-        <div
-          class="content"
+        <ul class="collection"
           v-for="item in this.studentData"
           :key="item.docID"
         >
-        <p>หมายเลขเอกสาร : {{ (item.docID) }}</p>
-          <p>ว/ด/ป ที่บันทึกข้อมูล : {{ JSON.parse(item.other).farm.study_reportDate }}</p>
-          <p>เอกสารของ : {{ (item.species) }}</p>
-        </div>
+        <p>หมายเลขบัตรประจำตัวประชาชน : {{ (item.docID) }}</p>
+          <p>ว/ด/ป ที่เข้าเรียน : {{ JSON.parse(item.information).admissionDate }}</p>
+          <p>ชื่อ-สกุล : {{ JSON.parse(item.information).title }} {{ JSON.parse(item.information).name }}</p>
+          <p>ว/ด/ป เกิด : {{ JSON.parse(item.information).birthDate }}</p>
+        </ul>
       </h1>
-      <h2 v-else>ผู้ใช้ยังไม่การบันทึกข้อมูลการเรียน</h2>
+      <h2 v-else>ผู้ใช้ยังไม่มีข้อมูลนักเรียน</h2>
     </section>
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
       "My-Custom-Header": "foobar",
     };
     axios
-      .get(this.$store.state.url.farmer + "api/v1/readData", { headers })
+      .get(this.$store.state.url.school + "api/v1/readData", { headers })
       .then((res) => {
         this.listing = res.data;
         // this.listing = JSON.stringify(this.listing).replace(/\\/g, '')
@@ -64,7 +64,7 @@ export default {
             this.studentData.push(record.Record)
           }
           });
-          console.log(this.studentData);
+          console.log('studentData',this.studentData);
         if (res.status == 401) {
           this.$router.replace({ path: "/login" });
         }
@@ -115,20 +115,23 @@ section {
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  width: 50%;
-  min-width: 300px;
+  font-size: 18px;
+  width: 60%;
+  
+}
+h1 {
+  min-width: 450px;
+  max-width: 600px;
 }
 section h2 {
   font-size: 18px;
   font-weight: 500;
 }
-.content {
+.collection{
   width: 100%;
-  height: 190px;
   background-color: #faeac6;
-  margin: 10px 0 10px 0;
 }
-.content p {
+.collection p {
   font-size: 18px;
   font-weight: lighter;
   margin: 0 0 5px 40px;

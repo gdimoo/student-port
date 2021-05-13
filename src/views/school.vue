@@ -6,7 +6,7 @@
     <section>
 <a href="/study_report1" class="study_report waves-effect waves-light btn-large"><i class="material-icons right">summarize</i><router-link to="/study_report1">ผลการเรียน</router-link></a>
 <a href="/student" class="cert waves-effect waves-light btn-large"><i class="material-icons right">people</i><router-link to="/student">ข้อมูลนักเรียน</router-link></a>
-<a href="/request" class="school waves-effect waves-light btn-large"><i class="material-icons right">pending_actions</i><router-link to="/student">คำขอรายงาน</router-link></a>
+<a href="/request" class="school waves-effect waves-light btn-large"><i class="material-icons right">pending_actions</i><router-link to="/request">คำขอรายงาน</router-link></a>
 
     </section>
   </div>

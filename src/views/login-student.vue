@@ -24,31 +24,38 @@
 import axios from "axios";
 export default {
   name: "login-student",
+  data(){
+    return{
+      user:""
+    }
+  },
   created(){
     if (localStorage.getItem("LoggedUser")) {
-      this.$router.replace({ path: "/home" });
+      this.$router.replace({ path: "/data-center" });
     }
         },
   methods: {
     login() {
       console.log("cur user to login", this.user);
 
-      let urlUser = this.$store.state.url.farmer;
-      if (this.user === "cert1") {
-        urlUser = this.$store.state.url.cert;
-      } else if (this.user === "school1") {
-        urlUser = this.$store.state.url.school;
-      }
+      let urlUser = this.$store.state.url.data;
+
       axios
         .post(urlUser + "login", { username: this.user })
         .then((res) => {
-          if (res.data !== "Wrong username") {
+          if (res.data !== "ไม่พบผู้ใช้นี้ในระบบ" && res.data.status!=500) {
             console.log(res.data);
             const token = res.data;
             localStorage.setItem("LoggedUser", this.user);
             console.log("login    ", localStorage.getItem("LoggedUser"));
             localStorage.setItem("token", token);
-            this.$router.replace({ path: "/" });
+            localStorage.setItem("role", "data-center");
+            this.$router.replace({ path: "/data-center" });
+      location.reload()
+
+          }
+          else{
+            alert("ไม่พบผู้ใช้นี้ในระบบ")
           }
         })
         .catch((err) => alert(err)

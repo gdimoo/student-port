@@ -57,7 +57,20 @@ const routes = [
     component: () => import('../views/recieve.vue')
   },
   {
+    path: '/data-center',
+    beforeEnter : guardMyroute,
+    name: 'data-center',
+    component: () => import('../views/data-center.vue')
+  },
+  {
+    path: '/certificate',
+    beforeEnter : guardMyroute,
+    name: 'certificate',
+    component: () => import('../views/certificate.vue')
+  },
+  {
     path: '/request',
+    beforeEnter : guardMyroute,
     name: 'request',
     component: () => import('../views/request.vue')
   },
@@ -104,12 +117,6 @@ const routes = [
     component: () => import('../views/student.vue')
   },
   {
-    path: '/participate',
-    beforeEnter : guardMyroute,
-    name: 'participate',
-    component: () => import('../views/participate.vue')
-  },
-  {
     path: '/add-student',
     beforeEnter : guardMyroute,
     name: 'add-student',
@@ -154,6 +161,12 @@ const routes = [
     path: '/show',
     name: 'show',
     component: () => import('../views/show.vue')
+  },
+  {
+    path: '/transcript',
+    beforeEnter : guardMyroute,
+    name: 'transcript',
+    component: () => import('../views/transcript.vue')
   },
   
 ]

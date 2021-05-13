@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       docID:
-        moment(new Date()).format("YYMMDD")+
+        moment(new Date()).format("YYYYMMDDhmm")+
         localStorage.getItem("LoggedUser").split(',')[0],
       recordDate: moment().format('YYYY-MM-DD'),
       owner: this.$store.state.report.owner,
@@ -157,9 +157,9 @@ export default {
       semester: this.semester,
       year: this.year,
       studyReports: JSON.stringify(this.studyReports, null, 2),
-      studentProfile: res
+      studentProfile: res.data
       });
-      console.log(this.$store.state.report);
+      console.log('report ',this.$store.state.report);
 
       axios
         .post(this.$store.state.url.school+"api/v1/createReport", this.$store.state.report, {

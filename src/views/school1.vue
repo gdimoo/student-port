@@ -105,7 +105,7 @@ section {
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  width: 50%;
+  width: 80%;
   min-width: 300px;
 }
 section h2{

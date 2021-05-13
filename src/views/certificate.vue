@@ -1,31 +1,32 @@
 <template>
   <div id="study_report1">
     <header>
-      <router-link to="/training">
-        <i class="material-icons nav__icon">keyboard_backspace</i>
-      </router-link>
+      <i @click="$router.go(-1)" class="material-icons nav__icon"
+        >keyboard_backspace</i
+      >
     </header>
     <div class="title">
-      <h1>รายชื่อผู้เข้าอบรม</h1>
+      <h1>การอบรม</h1>
       <div class="icon">
-        <router-link to="/add-member">
+        <router-link to="/cert2">
           <i class="material-icons nav__icon">add_circle</i>
         </router-link>
       </div>
     </div>
     <section>
-      <h1 v-if="this.farmerData.length > 0">
-        <div
-          class="content"
-          v-for="item in this.farmerData"
-          :key="item.docID"
-        >
-        <p>หมายเลขเอกสาร : {{ (item.docID) }}</p>
-          <p>ว/ด/ป ที่บันทึกข้อมูล : {{ JSON.parse(item.other).farm.study_reportDate }}</p>
-          <p>เอกสารของ : {{ (item.species) }}</p>
+      <h1 v-if="this.certData.length > 0">
+        <div class="collection" v-for="item in this.certData" :key="item.docID">
+          <!-- <p>หมายเลขเอกสาร : {{ (item.docID) }}</p> -->
+          <p>
+            วัน/เดือน/ปี ที่ฝึกอบรม :
+            {{ JSON.parse(item.information).certDate }}
+          </p>
+          <p>ชื่อหลักสูตร : {{ JSON.parse(item.information).course }}</p>
+          <p>ผู้ฝึกสอน : {{ JSON.parse(item.information).trainer }}</p>
+          <p>เอกสารของ : {{ item.owner }}</p>
         </div>
       </h1>
-      <h2 v-else>ผู้ใช้ยังไม่การบันทึกข้อมูลการเรียน</h2>
+      <h2 v-else>ผู้ใช้ยังไม่มีบันทึกข้อมูลการฝึกอบรม</h2>
     </section>
   </div>
 </template>
@@ -37,7 +38,7 @@ export default {
   data() {
     return {
       listing: [],
-      farmerData: [],
+      certData: [],
     };
   },
   computed: {
@@ -46,25 +47,26 @@ export default {
     },
   },
   created() {
-    console.log("current user har1", this.$store.state.user, localStorage.getItem('token'));
-    // POST request using axios with set headers
     const headers = {
-      Authorization: localStorage.getItem('token'),
+      Authorization: localStorage.getItem("token"),
       "My-Custom-Header": "foobar",
     };
     axios
-      .get(this.$store.state.url.farmer + "api/v1/readData", { headers })
+      .get(this.$store.state.url.data + "api/v1/readData", { headers })
       .then((res) => {
         this.listing = res.data;
         // this.listing = JSON.stringify(this.listing).replace(/\\/g, '')
         // console.log((this.listing),this.listing.length);
-        this.listing.forEach(record => {
+        this.listing.forEach((record) => {
           // console.log(record.Record)
-          if (record.Record.docID.includes('0'+localStorage.getItem('LoggedUser'))) {
-            this.farmerData.push(record.Record)
+          if (
+            record.Record.category.includes("certificate") &&
+            record.Record.owner.includes(localStorage.getItem("LoggedUser"))
+          ) {
+            this.certData.push(record.Record);
           }
-          });
-          console.log(this.farmerData);
+        });
+        console.log(this.certData);
         if (res.status == 401) {
           this.$router.replace({ path: "/login" });
         }
@@ -73,8 +75,7 @@ export default {
         console.log(err.response.status);
         if (err.response.status === 401) {
           this.$router.push("/school");
-          alert("คุณไม่มีสิทธิ์ในส่วนการนักเรียน");
-          
+          alert("คุณไม่มีสิทธิ์ในส่วนการอบรม");
         }
       });
   },
@@ -115,23 +116,27 @@ section {
   flex-direction: column;
   align-items: center;
   margin: 0 auto;
-  width: 50%;
-  min-width: 300px;
+  font-size: 18px;
+  width: 60%;
+}
+h1 {
+  min-width: 450px;
+  max-width: 600px;
 }
 section h2 {
   font-size: 18px;
   font-weight: 500;
 }
-.content {
+.collection {
   width: 100%;
-  height: 190px;
   background-color: #faeac6;
-  margin: 10px 0 10px 0;
 }
-.content p {
+.collection p {
   font-size: 18px;
   font-weight: lighter;
   margin: 0 0 5px 40px;
+  line-height: normal;
+
   padding-top: 5px;
 }
 

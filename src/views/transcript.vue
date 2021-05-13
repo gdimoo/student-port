@@ -1,16 +1,14 @@
 <template>
   <div id="study_report1">
     <header>
-      <router-link to="/school">
-        <i class="material-icons nav__icon">keyboard_backspace</i>
-      </router-link>
+      <i @click="$router.go(-1)" class="material-icons nav__icon">keyboard_backspace</i>
     </header>
     <div class="title">
       <h1>รายการผลการศึกษา</h1>
       <div class="icon">
-        <router-link to="/study_report2">
+        <!-- <router-link to="/study_report2">
           <i class="material-icons nav__icon">add_circle</i>
-        </router-link>
+        </router-link> -->
       </div>
     </div>
     <section>
@@ -24,11 +22,7 @@
           <p>นักเรียน : {{ (item.owner) }}</p>
           <p>ว/ด/ป ที่บันทึกข้อมูล : {{ JSON.parse(item.information).recordDate }}</p>
           <p>ปีการศึกษา : {{ JSON.parse(item.information).semester }} / {{ JSON.parse(item.information).year }}</p>
-          <p>ผลการศึกษา : {{ (JSON.parse(item.information).studyReports) }}</p>
-          <!-- <li v-for="list in JSON.parse(item.information).studyReports[0]" :key="list"> -->
-    <!-- {{ list }}
-  </li> -->
-
+          <p>ผลการศึกษา : {{ JSON.parse(item.information).studyReports }}</p>
 
         </div>
       </h1>
@@ -64,7 +58,7 @@ export default {
         this.listing = res.data;
 
         this.listing.forEach(record => {
-          if (record.Record.category.includes('transcript')) {
+          if (record.Record.category.includes('transcript') && record.Record.owner.includes(localStorage.getItem("LoggedUser")) ) {
             this.reportData.push(record.Record)
           }
           });
@@ -83,8 +77,7 @@ export default {
       });
   },
 };
-</script>
-<style scoped>
+</script><style scoped>
 header {
   height: 50px;
   position: relative;

@@ -1,34 +1,117 @@
 <template>
   <div id="cert2">
     <header>
-      <router-link to="/training">
-        <i class="material-icons nav__icon">keyboard_backspace</i>
-      </router-link>
+      <i @click="$router.go(-1)" class="material-icons nav__icon"
+        >keyboard_backspace</i
+      >
     </header>
     <section>
       <div id="tabs" class="container">
         <div class="tabs">
+
+          <a v-if="this.$store.state.role == 'data-center'"
+            v-on:click="activetab = 3"
+            v-bind:class="[activetab === 3 ? 'active' : '']"
+            >เพิ่มคำขอ</a
+          >
           <a
             v-on:click="activetab = 1"
             v-bind:class="[activetab === 1 ? 'active' : '']"
-            >รอดำเนินการ<span class="new badge">{{pending}}</span></a
+            >รอดำเนินการ<span class="new badge blue" data-badge-caption="รายการ">{{ this.requestData.length }}</span></a
           >
           <a
             v-on:click="activetab = 2"
             v-bind:class="[activetab === 2 ? 'active' : '']"
-            >ดำเนินการเสร็จสิ้น</a
+            >ดำเนินการเสร็จสิ้น<span class="new badge blue" data-badge-caption="รายการ">{{ this.completeData.length }}</span></a
           >
         </div>
 
         <div class="content">
           <div v-if="activetab === 1" class="tabcontent">
-            Is this the real life? Is this just fantasy?
+            <h1 v-if="this.requestData.length > 0">
+              <div
+                class="collection"
+                v-for="item in this.requestData"
+                :key="item.docID"
+              >
+                <p>หมายเลขเอกสาร : {{ item.docID }}</p>
+                <p>
+                  ว/ด/ป ที่ขอข้อมูล :
+                  {{ JSON.parse(item.information).recordDate }}
+                </p>
+                <p>
+                  เอกสารที่ขอ : {{ JSON.parse(item.information).transcript ? "ผลการศึกษา":"" }} 
+                  {{ JSON.parse(item.information).certificate ? "หลักสูตรที่ฝึกอบรม":""  }}
+                </p>
+                  <button  v-if="role != 'data-center'"
+              class="btn  waves-effect waves-light"
+              @click="approve(item)"
+              name="action"
+            >
+              อนุมัติ
+              <i class="material-icons right">done</i>
+            </button>
+                  <!-- <button
+              class="btn red waves-effect waves-light"
+              @click="submit"
+              name="action"
+            >
+              ไม่อนุมัติ
+              <i class="material-icons right">close</i>
+            </button> -->
+              </div>
+            </h1>
+            <h2 v-else>ผู้ใช้ยังไม่มีรายการคำขอ</h2>
           </div>
           <div v-if="activetab === 2" class="tabcontent">
-            Caught in a landslide, no escape from reality
+
+            <h1 v-if="this.completeData.length > 0">
+              <div
+                class="collection"
+                v-for="item in this.completeData"
+                :key="item.docID"
+              >
+                <p>หมายเลขเอกสาร : {{ item.docID }}</p>
+                <p>
+                  ว/ด/ป ที่ขอข้อมูล :
+                  {{ JSON.parse(item.information).recordDate }}
+                </p>
+                <p>
+                  เอกสารที่ขอ : {{ JSON.parse(item.information).transcript ? "ผลการศึกษา":"" }} 
+                  {{ JSON.parse(item.information).certificate ? "หลักสูตรที่ฝึกอบรม":""  }}
+                </p>
+                <p>
+                  หมายเหตุ : {{ JSON.parse(item.information).note }}
+                </p>
+              </div>
+            </h1>
+            <h2 v-else>ผู้ใช้ยังไม่มีรายการคำขอ</h2>
           </div>
-          <div v-if="activetab === 3" class="tabcontent">
-            Open your eyes, look up to the skies and see
+          <div v-if="activetab === 3" class="tabcontent request">
+            <p>
+              <label>
+                <input type="checkbox" class="filled-in" checked="transcript" />
+                <span class="black-text">ผลการศึกษา</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input
+                  type="checkbox"
+                  class="filled-in"
+                  checked="certificate"
+                />
+                <span class="black-text">หลักสูตรที่ฝึกอบรม</span>
+              </label>
+            </p>
+            <button
+              class="btn waves-effect waves-light"
+              @click="submit"
+              name="action"
+            >
+              สร้างคำขอ
+              <i class="material-icons right">send</i>
+            </button>
           </div>
         </div>
       </div>
@@ -40,26 +123,92 @@ import moment from "moment";
 import axios from "axios";
 
 export default {
-  name: "cert2",
+  name: "request",
   data() {
     return {
       activetab: 1,
-      pending:4,
       docID:
         moment(new Date()).format("YYYYMMDDhmm") +
         localStorage.getItem("LoggedUser").split(",")[0],
-      certDate: moment().format("YYYY-MM-DD"),
-      course: "",
-      idCard: "",
-      trainer: "",
+      transcript: false,
+      certificate: false,
+      listing: [],
+      requestData: [],
+      completeData: [],
+      role :this.$store.state.role
+
     };
   },
   created() {
-    console.log("cert2", localStorage.getItem("LoggedUser"));
+    console.log("login    ", this.$store.state.role );
+    const headers = {
+      Authorization: localStorage.getItem("token"),
+      "My-Custom-Header": "foobar",
+    };
+    axios
+      .get(this.$store.state.url.data + "api/v1/readData", { headers })
+      .then((res) => {
+        this.listing = res.data;
+        this.listing.forEach((record) => {
+          if(this.$store.state.role == 'data-center'){
+          if (
+            record.Record.category.includes("request") &&
+            record.Record.creator.includes(localStorage.getItem("LoggedUser")) &&
+            record.Record.owner.includes(localStorage.getItem("LoggedUser") )
+          ) {
+            this.requestData.push(record.Record);
+          }
+          else if (
+            record.Record.category.includes("request") &&
+            record.Record.owner.includes(localStorage.getItem("LoggedUser") )
+          ) {
+            this.completeData.push(record.Record);
+          }}
+          else if(this.$store.state.role == 'school'){
+          if (
+            record.Record.category.includes("request") &&
+            JSON.parse(record.Record.information).transcript
+          ) {
+            this.requestData.push(record.Record);
+          }
+          else if (
+            record.Record.category.includes("request") &&
+            record.Record.creator.includes(localStorage.getItem("LoggedUser") )
+          ) {
+            this.completeData.push(record.Record);
+          }}
+          else if(this.$store.state.role == 'training'){
+          if (
+            record.Record.category.includes("request") &&
+            JSON.parse(record.Record.information).certificate
+          ) {
+            this.requestData.push(record.Record);
+          }
+          else if (
+            record.Record.category.includes("request") &&
+            record.Record.creator.includes(localStorage.getItem("LoggedUser") )
+          ) {
+            this.completeData.push(record.Record);
+          }}
+          
+        });
+        console.log('request',this.requestData );
+        console.log('completeData',this.completeData );
+        if (res.status == 401) {
+          this.$router.replace({ path: "/login" });
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.status);
+        if (err.response.status === 401) {
+          this.$router.push("/school");
+          alert("คุณไม่มีสิทธิ์ในจัดการข้อมูลในโรงเรียน");
+        }
+      });
   },
   computed: {
     user() {
-      return this.$store.state.user;
+      return this.$store.state.token;
     },
     cert() {
       return this.$store.state.cert;
@@ -67,30 +216,57 @@ export default {
   },
   methods: {
     submit() {
-      const data = {
-        studyReports: this.studyReports,
-      };
-      alert(JSON.stringify(data, null, 2));
-    },
-    recordData() {
-      this.$store.commit("setCert", {
+      this.$store.commit("setRequest", {
         docID: this.docID,
-        owner: this.idCard,
-        certDate: this.certDate,
-        course: this.course,
-        trainer: this.trainer,
+        owner: localStorage.getItem("LoggedUser").split(",")[1]
+          ? localStorage.getItem("LoggedUser").split(",")[1]
+          : localStorage.getItem("LoggedUser"),
+        transcript: this.transcript,
+        certificate: this.certificate,
+        recordDate: moment(new Date()).format("YYYYMMDDhmm"),
       });
-      console.log(this.$store.state.cert);
+      console.log(this.$store.state.request);
 
       axios
-        .post("http://165.232.173.183:3000/api/v1/createData", {
-          headers: {
-            Authorization: this.user,
-          },
-        })
+        .post(
+          this.$store.state.url.data + "api/v1/createRequest",
+          this.$store.state.request,
+          {
+            headers: {
+              Authorization: this.user,
+            },
+          }
+        )
         .then((res) => {
           if (res.status == 200) {
-            this.$router.replace({ path: "/cert3" });
+            alert("บันทึกคำขอสำเร็จ");
+          }
+        });
+    },
+    approve(item) {
+      let url;
+      if (role == 'school') {
+        url=this.$store.state.url.school;
+      } else {
+        url=this.$store.state.url.cert;
+      }
+      axios
+        .get(
+          url + "api/v1/approve/",
+          item.docID,
+          {
+            headers: {
+              Authorization: this.user,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            alert("อนุมัติสำเร็จ");
+
+
+      location.reload()
+
           }
         });
     },
@@ -98,6 +274,12 @@ export default {
 };
 </script>
 <style scoped>
+* {
+  font-size: 18px;
+  font-weight: lighter;
+  margin: 0 0 5px 40px;
+  padding-top: 5px;
+}
 header {
   height: 65px;
   position: relative;
@@ -146,15 +328,7 @@ select {
   padding-left: 20px;
 }
 button {
-  margin: 50px auto;
-  background-color: #81542d;
-  color: white;
-  border: none;
-  cursor: pointer;
-  width: 230px;
-  height: 55px;
-  font-size: 25px;
-  font-weight: bold;
+  margin: 20px 20px 20px 20px;
 }
 .next {
   margin: 50px auto;
@@ -233,5 +407,10 @@ button {
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 3px 3px 6px #e1e1e1;
+}
+
+.request {
+  align-items: center;
+  text-align: center;
 }
 </style>

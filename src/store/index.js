@@ -7,8 +7,8 @@ Vue.use(Vuex)
 
 const state = {
   user: localStorage.getItem('LoggedUser') || '',
+  role: localStorage.getItem('role') || '',
   docID: '',
-  type: localStorage.getItem('type') || '',
   token: localStorage.getItem('token') || '',
   url:{
     data:"http://128.199.237.106:5000/",
@@ -45,14 +45,21 @@ const state = {
     course: "",
     trainer: "",
   },
-  location:{
-    farmLocation:"",
-    farmdocID:"",
-    millLocation:"",
-    milldocID:"",
-    reportLocation:"",
-    reportdocID:"",
-  }
+  request:{
+    docID:"",
+    owner: "",
+    recordDate: "",
+    transcript: "",
+    certificate: "",
+  },
+  cert:{
+    docID:"",
+    owner: "",
+    certDate: "",
+    course: "",
+    trainer: "",
+  },
+
 }
 
 const mutations ={
@@ -78,8 +85,8 @@ const mutations ={
   setDocID: (state, docID) => {
     state.docID = docID
   },
-  setLocation: (state, location) => {
-    state.location = location
+  setRequest: (state, request) => {
+    state.request = request
   },
   
   setShowDetail: (state, showDetail) => {
@@ -106,7 +113,7 @@ const getters = {
   studentProfile: state => state.studentProfile,
   farmerList: state => state.farmerList,
   token: state => state.token,
-  location: state => state.location,
+  request: state => state.request,
   showDetail: state => state.showDetail,
   number: state => state.number
 }
