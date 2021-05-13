@@ -11,10 +11,10 @@ const state = {
   docID: '',
   token: localStorage.getItem('token') || '',
   url:{
-    data:"http://128.199.237.106:5000/",
-    cert:"http://128.199.237.106:4000/",
-    school:"http://128.199.237.106:3000/",
-    main:"http://localhost:8080/"
+    data:"https://request.student-portfolio.ml/",
+    cert:"https://cert.student-portfolio.ml/",
+    school:"https://learn.student-portfolio.ml/",
+    main:"https://student-portfolio.ml"
   },
   report:{
     docID: "",
