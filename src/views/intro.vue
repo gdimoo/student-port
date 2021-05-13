@@ -139,7 +139,7 @@ section {
 .splash {
   height: 100vh;
   position: relative;
-  background-image: url('../assets/graduates.png');
+  background-image: url('../assets/graduates.jpg');
   background-position: center center;
   background-size: cover;
   background-attachment: fixed;

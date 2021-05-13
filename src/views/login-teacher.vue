@@ -67,7 +67,7 @@ header{
   width: 100%;
   height: 200px;
   margin: 0 auto;
-  background: url('../assets/coffee.jpg') no-repeat;
+  
   background-position: center;
 }
 nav{
