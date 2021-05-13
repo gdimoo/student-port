@@ -75,18 +75,6 @@ const routes = [
     component: () => import('../views/request.vue')
   },
   {
-    path: '/check',
-    beforeEnter : guardMyroute,
-    name: 'check',
-    component: () => import('../views/check.vue')
-  },
-  {
-    path: '/reader',
-    beforeEnter : guardMyroute,
-    name: 'reader',
-    component: () => import('../views/qrcode-reader.vue')
-  },
-  {
     path: '/school',
     beforeEnter : guardMyroute,
     name: 'school',
@@ -123,11 +111,6 @@ const routes = [
     component: () => import('../views/add-student.vue')
   },
   {
-    path: '/dropdown',
-    name: 'dropdown',
-    component: () => import('../views/dropdown.vue')
-  },
-  {
     path: '/cert1',
     beforeEnter : guardMyroute,
     name: 'cert1',
@@ -138,29 +121,6 @@ const routes = [
     beforeEnter : guardMyroute,
     name: 'cert2',
     component: () => import('../views/cert2.vue')
-  },
-  {
-    path: '/school1',
-    beforeEnter : guardMyroute,
-    name: 'school1',
-    component: () => import('../views/school1.vue')
-  },
-  {
-    path: '/school2',
-    beforeEnter : guardMyroute,
-    name: 'school2',
-    component: () => import('../views/school2.vue')
-  },
-  {
-    path: '/school3',
-    beforeEnter : guardMyroute,
-    name: 'school3',
-    component: () => import('../views/school3.vue')
-  },
-  {
-    path: '/show',
-    name: 'show',
-    component: () => import('../views/show.vue')
   },
   {
     path: '/transcript',

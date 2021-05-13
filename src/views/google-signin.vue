@@ -68,8 +68,8 @@ export default {
       }
       location.reload()
     },
-    onFailure(){
-      alert('เกิดข้อผิดพลาด ลงชื่อเข้าใช้ไม่สำเร็จ')
+    onFailure(e){
+      alert('เกิดข้อผิดพลาด ลงชื่อเข้าใช้ไม่สำเร็จ',e)
     }
   },
 };
