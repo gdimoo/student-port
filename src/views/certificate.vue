@@ -7,11 +7,6 @@
     </header>
     <div class="title">
       <h1>การอบรม</h1>
-      <div class="icon">
-        <router-link to="/cert2">
-          <i class="material-icons nav__icon">add_circle</i>
-        </router-link>
-      </div>
     </div>
     <section>
       <h1 v-if="this.certData.length > 0">
