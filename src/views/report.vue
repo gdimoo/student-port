@@ -33,8 +33,8 @@ export default {
   name: "report",
   data() {
     return {
-      general: true,
-      crop: false,
+      tran: true,
+      cert: false,
       show:false,
 tranData:[],
 certData:[],

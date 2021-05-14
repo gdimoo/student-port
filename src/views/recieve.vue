@@ -22,17 +22,14 @@
         ยืนยันข้อมูล
       </button>
     </div>
-    <report v-if="this.$store.state.publicReport.owner.length>0" />
   </div>
 </template>
 <script>
 import axios from "axios";
-import report from "@/components/report.vue";
 // import moment from "moment";
 export default {
   name: "recieve",
   components:{
-    report
   },
   data() {
     return {
