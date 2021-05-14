@@ -8,8 +8,8 @@
     <section>
       <div id="tabs" class="container">
         <div class="tabs">
-
-          <a v-if="this.$store.state.role == 'data-center'"
+          <a
+            v-if="this.$store.state.role == 'data-center'"
             v-on:click="activetab = 3"
             v-bind:class="[activetab === 3 ? 'active' : '']"
             >เพิ่มคำขอ</a
@@ -17,12 +17,20 @@
           <a
             v-on:click="activetab = 1"
             v-bind:class="[activetab === 1 ? 'active' : '']"
-            >รอดำเนินการ<span class="new badge blue" data-badge-caption="รายการ">{{ this.requestData.length }}</span></a
+            >รอดำเนินการ<span
+              class="new badge blue"
+              data-badge-caption="รายการ"
+              >{{ this.requestData.length }}</span
+            ></a
           >
           <a
             v-on:click="activetab = 2"
             v-bind:class="[activetab === 2 ? 'active' : '']"
-            >ดำเนินการเสร็จสิ้น<span class="new badge blue" data-badge-caption="รายการ">{{ this.completeData.length }}</span></a
+            >ดำเนินการเสร็จสิ้น<span
+              class="new badge blue"
+              data-badge-caption="รายการ"
+              >{{ this.completeData.length }}</span
+            ></a
           >
         </div>
 
@@ -40,48 +48,60 @@
                   {{ JSON.parse(item.information).recordDate }}
                 </p>
                 <p>
-                  เอกสารที่ขอ : {{ JSON.parse(item.information).transcript ? "ผลการศึกษา":"" }} 
-                  {{ JSON.parse(item.information).certificate ? "หลักสูตรที่ฝึกอบรม":""  }}
+                  เอกสารที่ขอ :
+                  {{
+                    JSON.parse(item.information).transcript == "true"
+                      ? "ผลการศึกษา"
+                      : ""
+                  }}
+                  {{
+                    JSON.parse(item.information).certificate == "true"
+                      ? "หลักสูตรที่ฝึกอบรม"
+                      : ""
+                  }}
                 </p>
-                  <button  v-if="role != 'data-center'"
-              class="btn  waves-effect waves-light"
-              @click="approve(item)"
-              name="action"
-            >
-              อนุมัติ
-              <i class="material-icons right">done</i>
-            </button>
-                  <!-- <button
-              class="btn red waves-effect waves-light"
-              @click="submit"
-              name="action"
-            >
-              ไม่อนุมัติ
-              <i class="material-icons right">close</i>
-            </button> -->
+                <button
+                  v-if="role != 'data-center'"
+                  class="btn waves-effect waves-light"
+                  @click="approve(item.docID)"
+                  name="action"
+                >
+                  อนุมัติ
+                  <i class="material-icons right">done</i>
+                </button>
               </div>
             </h1>
             <h2 v-else>ผู้ใช้ยังไม่มีรายการคำขอ</h2>
           </div>
           <div v-if="activetab === 2" class="tabcontent">
-
             <h1 v-if="this.completeData.length > 0">
               <div
                 class="collection"
                 v-for="item in this.completeData"
                 :key="item.docID"
               >
-                <p>หมายเลขเอกสาร : {{ item.docID }}</p>
+                <p>หมายเลขเอกสาร : {{item.docID}}
+                   <button class="waves-effect waves-light btn"
+      v-clipboard:copy="item.docID"
+      v-clipboard:success="onCopy"
+      v-clipboard:error="onError">คัดลอกรหัสส่งต่อ</button>
+                </p>
                 <p>
                   ว/ด/ป ที่ขอข้อมูล :
                   {{ JSON.parse(item.information).recordDate }}
                 </p>
                 <p>
-                  เอกสารที่ขอ : {{ JSON.parse(item.information).transcript ? "ผลการศึกษา":"" }} 
-                  {{ JSON.parse(item.information).certificate ? "หลักสูตรที่ฝึกอบรม":""  }}
-                </p>
-                <p>
-                  หมายเหตุ : {{ JSON.parse(item.information).note }}
+                  เอกสารที่ขอ :
+                  {{
+                    JSON.parse(item.information).transcript == "true"
+                      ? "ผลการศึกษา"
+                      : ""
+                  }}
+                  {{
+                    JSON.parse(item.information).certificate == "true"
+                      ? "หลักสูตรที่ฝึกอบรม"
+                      : ""
+                  }}
                 </p>
               </div>
             </h1>
@@ -90,7 +110,7 @@
           <div v-if="activetab === 3" class="tabcontent request">
             <p>
               <label>
-                <input type="checkbox" class="filled-in" checked="transcript" />
+                <input type="checkbox" class="filled-in" v-model="transcript" />
                 <span class="black-text">ผลการศึกษา</span>
               </label>
             </p>
@@ -99,7 +119,7 @@
                 <input
                   type="checkbox"
                   class="filled-in"
-                  checked="certificate"
+                  v-model="certificate"
                 />
                 <span class="black-text">หลักสูตรที่ฝึกอบรม</span>
               </label>
@@ -108,6 +128,7 @@
               class="btn waves-effect waves-light"
               @click="submit"
               name="action"
+              :disabled="!transcript && !certificate"
             >
               สร้างคำขอ
               <i class="material-icons right">send</i>
@@ -135,12 +156,11 @@ export default {
       listing: [],
       requestData: [],
       completeData: [],
-      role :this.$store.state.role
-
+      role: this.$store.state.role,
     };
   },
   created() {
-    console.log("login    ", this.$store.state.role );
+    console.log("login    ", this.$store.state.role);
     const headers = {
       Authorization: localStorage.getItem("token"),
       "My-Custom-Header": "foobar",
@@ -150,50 +170,60 @@ export default {
       .then((res) => {
         this.listing = res.data;
         this.listing.forEach((record) => {
-          if(this.$store.state.role == 'data-center'){
-          if (
-            record.Record.category.includes("request") &&
-            record.Record.creator.includes(localStorage.getItem("LoggedUser")) &&
-            record.Record.owner.includes(localStorage.getItem("LoggedUser") )
-          ) {
-            this.requestData.push(record.Record);
+          if (this.$store.state.role == "data-center") {
+            if (
+              record.Record.category.includes("request") &&
+              record.Record.creator.includes(
+                localStorage.getItem("LoggedUser")
+              ) &&
+              record.Record.owner.includes(localStorage.getItem("LoggedUser"))
+            ) {
+              this.requestData.push(record.Record);
+            } else if (
+              record.Record.category.includes("request") &&
+              record.Record.owner.includes(localStorage.getItem("LoggedUser"))
+            ) {
+              this.completeData.push(record.Record);
+            }
+          } else if (this.$store.state.role == "school") {
+            if (
+              record.Record.category.includes("request") &&
+              JSON.parse(record.Record.information).transcript == "true"
+            ) {
+              console.log(record.Record.creator);
+                  
+              if (
+                record.Record.creator.includes(
+                  localStorage.getItem("LoggedUser").split(',')[2]
+                )
+              ) {
+                console.log('sch complete');
+                this.completeData.push(record.Record);
+              } else {
+                console.log('sch request');
+
+                this.requestData.push(record.Record);
+              }
+            }
+          } else if (this.$store.state.role == "training") {
+            if (
+              record.Record.category.includes("request") &&
+              JSON.parse(record.Record.information).certificate == "true"
+            ) {
+              if (
+                record.Record.creator.includes(
+                  localStorage.getItem("LoggedUser").split(',')[2]
+                )
+              ) {
+                this.completeData.push(record.Record);
+              } else {
+                this.requestData.push(record.Record);
+              }
+            }
           }
-          else if (
-            record.Record.category.includes("request") &&
-            record.Record.owner.includes(localStorage.getItem("LoggedUser") )
-          ) {
-            this.completeData.push(record.Record);
-          }}
-          else if(this.$store.state.role == 'school'){
-          if (
-            record.Record.category.includes("request") &&
-            JSON.parse(record.Record.information).transcript
-          ) {
-            this.requestData.push(record.Record);
-          }
-          else if (
-            record.Record.category.includes("request") &&
-            record.Record.creator.includes(localStorage.getItem("LoggedUser") )
-          ) {
-            this.completeData.push(record.Record);
-          }}
-          else if(this.$store.state.role == 'training'){
-          if (
-            record.Record.category.includes("request") &&
-            JSON.parse(record.Record.information).certificate
-          ) {
-            this.requestData.push(record.Record);
-          }
-          else if (
-            record.Record.category.includes("request") &&
-            record.Record.creator.includes(localStorage.getItem("LoggedUser") )
-          ) {
-            this.completeData.push(record.Record);
-          }}
-          
         });
-        console.log('request',this.requestData );
-        console.log('completeData',this.completeData );
+        console.log("request", this.requestData);
+        console.log("completeData", this.completeData);
         if (res.status == 401) {
           this.$router.replace({ path: "/login" });
         }
@@ -240,36 +270,38 @@ export default {
         .then((res) => {
           if (res.status == 200) {
             alert("บันทึกคำขอสำเร็จ");
+            location.reload();
           }
         });
     },
-    approve(item) {
+    approve(docID) {
+      console.log("approve ", docID);
       let url;
-      if (this.role == 'school') {
-        url=this.$store.state.url.school;
+      if (this.role == "school") {
+        url = this.$store.state.url.school;
       } else {
-        url=this.$store.state.url.cert;
+        url = this.$store.state.url.cert;
       }
       axios
-        .get(
-          url + "api/v1/approve/",
-          item.docID,
-          {
-            headers: {
-              Authorization: this.user,
-            },
-          }
-        )
+        .get(url + `api/v1/approve/${docID}`, {
+          headers: {
+            Authorization: this.user,
+          },
+        })
         .then((res) => {
           if (res.status == 200) {
             alert("อนุมัติสำเร็จ");
 
-
-      location.reload()
-
+            location.reload();
           }
         });
     },
+    onCopy: function (e) {
+      alert('คุณได้คัดลอกรหัสส่งต่อ ' + e.text)
+    },
+    onError: function () {
+      alert('ไม่สามารถคัดลอกได้')
+    }
   },
 };
 </script>

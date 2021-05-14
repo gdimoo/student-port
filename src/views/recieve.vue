@@ -15,110 +15,69 @@
           v-model="transferToken"
           placeholder="รหัสมอบสิทธิ์ในการดูเอกสาร"
         />
-  </div>
-
+      </div>
     </section>
     <div class="input">
-      <button class="waves-effect waves-light btn-large" @click="recordData()">ยืนยันข้อมูล</button>
+      <button class="waves-effect waves-light btn-large" @click="recieve(transferToken)">
+        ยืนยันข้อมูล
+      </button>
     </div>
+    <report v-if="this.$store.state.publicReport.owner.length>0" />
   </div>
 </template>
 <script>
 import axios from "axios";
-import moment from "moment";
-
+import report from "@/components/report.vue";
+// import moment from "moment";
 export default {
-  name: "report2",
+  name: "recieve",
+  components:{
+    report
+  },
   data() {
     return {
-      docID:
-        moment(new Date()).format("YYMMDD")+
-        localStorage.getItem("LoggedUser").split(',')[0],
-      recordDate: moment().format('YYYY-MM-DD'),
-      owner: this.$store.state.report.owner,
-      semester: this.$store.state.report.semester,
-      year: this.$store.state.report.year,
-      listing: {},
-      studyReports: [{
-        subject: "",
-        score: ""
-      }],
+      listing: [],
+      transferToken:'',
     };
   },
   computed: {
-    user() {
-      return this.$store.state.token;
+    creator() {
+      return localStorage.getItem("LoggedUser").split(",")[0];
     },
-    creator(){
-      return localStorage.getItem("LoggedUser").split(',')[0];
-
-    }
   },
   methods: {
-    addReport () {
-      this.studyReports.push({
-        subject: '',
-        score: ''
-      })
-    },
-
-    submit () {
-      const data = {
-        studyReports: this.studyReports
-      }
-      alert(JSON.stringify(data, null, 2))
-    },
-    recordData() {
-      try {
-        axios
-        .get(this.$store.state.url.school+"api/v1/readData/"+this.owner, {
-          headers: {
-            Authorization: this.user,
-          },
-        })
-        .then((res) => {
-          console.log(res.data.status);
-          if (res.data.status!=500) {
-             this.$store.commit("setReport", {
-        ...this.report,
-        docID: this.docID,
-        recordDate: this.recordDate,
-      owner: this.owner,
-      semester: this.semester,
-      year: this.year,
-      studyReports: JSON.stringify(this.studyReports, null, 2),
-      studentProfile: res
-      });
-      console.log(this.$store.state.report);
-
+    recieve(docID) {
+      console.log("recieve ", docID);
       axios
-        .post(this.$store.state.url.school+"api/v1/createReport", this.$store.state.report, {
-          headers: {
-            Authorization: this.user,
-          },
+        .get(this.$store.state.url.data + `api/v1/recieve/${docID}`, {
         })
         .then((res) => {
-          if (res.status == 200) {
-            alert('บันทึกข้อมูลสำเร็จ')
-      this.$router.replace({ path: "/study_report1" });
-            }
-          });
-            }
+          if (res.data.status!=500) {
+          console.log(res);
+          if (
+            res.data.creator.includes(res.data.owner) && res.data.category.includes('request')
+          ) {
+            alert('ข้อมูลยังไม่ได้รับการอนุมัติจากองค์กรที่เกี่ยวข้อง')
+          } else if(res.data.category.includes('request')) {
+            alert('ระบบรับรหัสมอบสิทธิ์ในการดูเอกสาร')
+          this.listing = res.data;
+          this.$store.commit("setPublicReport", {
+      owner: this.listing.owner,
+      transcript: JSON.parse(this.listing.information).transcript == 'true',
+      certificate: JSON.parse(this.listing.information).certficate == 'true',
+      });
+      this.$router.replace({ path: "/report" });
 
-            else{
-              alert('ยังไม่มีข้อมูลนักเรียนในระบบ กรุณาเพิ่มข้อมูลนักเรียน')
-              this.$router.replace({ path: "/add-student" });
-
-            }
-          });
-      } 
-      catch (error) {
-        alert(error)
-      }
-    }
-      
-
-     
+          }
+          else{
+            alert("รหัสมอบสิทธิ์ในการดูเอกสารไม่ถูกต้อง")
+          }
+          }
+          else{
+            alert("รหัสมอบสิทธิ์ในการดูเอกสารไม่ถูกต้อง")
+          }
+        });
+    },
   },
 };
 </script>

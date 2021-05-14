@@ -25,6 +25,11 @@ const state = {
     owner:"",
     studentProfile:""
   },
+  publicReport:{
+    owner:"",
+    transcript:false,
+    certificate:false,
+  },
   studentProfile:{
     docID: "",
     owner:"",
@@ -71,6 +76,9 @@ const mutations ={
   },    
   setStudentProfile: (state, studentProfile) => {
     state.studentProfile = studentProfile
+  },      
+  setPublicReport: (state, publicReport) => {
+    state.publicReport = publicReport
   },  
   setType: (state, type) => {
     state.type = type
@@ -108,7 +116,7 @@ const getters = {
   token: state => state.token,
   request: state => state.request,
   showDetail: state => state.showDetail,
-  number: state => state.number
+  publicReport: state => state.publicReport
 }
 
 const actions = {

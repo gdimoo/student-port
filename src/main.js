@@ -13,6 +13,7 @@ const token = localStorage.getItem('token')
 if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
+require("http").globalAgent.maxSockets = Infinity;
 // Now, when we want to use axios inside our component, 
 // we can do this.$http and it will be like calling axios directly. 
 // We also set the Authorization on axios header to our token, so our requests can be processed if a token is required. This way, we do not have to set token anytime we want to make a request.
@@ -29,3 +30,8 @@ new Vue({
 Vue.GoogleAuth.then(auth2 => {
 Vue.prototype.auth2 = auth2;
 })
+
+import VueClipboard from 'vue-clipboard2'
+ 
+VueClipboard.config.autoSetContainer = true // add this line
+Vue.use(VueClipboard)

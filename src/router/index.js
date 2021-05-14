@@ -57,6 +57,11 @@ const routes = [
     component: () => import('../views/recieve.vue')
   },
   {
+    path: '/report',
+    name: 'report',
+    component: () => import('../views/report.vue')
+  },
+  {
     path: '/data-center',
     beforeEnter : guardMyroute,
     name: 'data-center',

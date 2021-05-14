@@ -135,6 +135,7 @@ section h2 {
   font-size: 18px;
   font-weight: lighter;
   margin: 0 0 5px 40px;
+  line-height: normal;
   padding-top: 5px;
 }
 
