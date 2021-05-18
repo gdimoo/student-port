@@ -181,6 +181,18 @@ async function main(userId) {
 				getData()
 			})
 
+			app.get('/api/v1/receiveData', (req, res) => {
+
+
+				async function getData() {
+					console.log('\n--> Evaluate Transaction: GetAssetsByRange, function use an open start and open end range to return all');
+					let result = await contract.evaluateTransaction('GetAssetsByRange', '', '');
+					res.send(prettyJSONString(result.toString()));
+
+				}
+				getData()
+			})
+
 
 			app.get('/api/v1/readDatabyOwner', (req, res) => {
 				let curUser = JSON.parse(Buffer.from((req.headers.authorization).
@@ -256,22 +268,21 @@ async function main(userId) {
 
 
 			})
-			app.get('/api/v1/buyerReceiveData/:assetName', (req, res) => {
+			app.get('/api/v1/recieve/:assetName', (req, res) => {
 				const user = {
-					// userId: req.headers.authorization,
 					assetName: req.params.assetName
 				}
-				// let curUser = user.userId
 				console.log(user)
-				// main(curUser);
-
 
 				async function readData(assetName) {
 					console.log('\n--> Evaluate Transaction: ReadAsset, function returns information about an asset with ID(asset7)');
-					result = await contract.evaluateTransaction('ReadAsset', assetName);
+					result = await contract.evaluateTransaction('ReadAsset', assetName).catch((err) => 
+					{
+						console.log("Timeout or other error: ", err)
+						res.send(err)
+					});
 					console.log(`*** Result: ${prettyJSONString(result.toString())}`);
-					res.send(result);
-					// res.location(307, web_url+'/show?id=' + assetName);
+					res.send(prettyJSONString(result.toString()));
 				}
 
 				readData(user.assetName)

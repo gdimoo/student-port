@@ -229,7 +229,7 @@ async function main(userId) {
 						recordDate: String(req.body.recordDate),
 						semester: String(req.body.semester),
 						year: String(req.body.year),
-						studyReports: String(req.body.studyReports)
+						studyReports: (req.body.studyReports)
 					}
 				}
 				console.log('test', data.studyReports);
@@ -316,7 +316,7 @@ async function main(userId) {
 
 }
 
-main("teacher1");
+main('teacher1');
 
 
 const port = process.env.PORT || 3000
