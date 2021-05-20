@@ -268,7 +268,7 @@ async function main(userId) {
 
 
 			})
-			app.get('/api/v1/recieve/:assetName', (req, res) => {
+			app.get('/api/v1/receive/:assetName', (req, res) => {
 				const user = {
 					assetName: req.params.assetName
 				}
