@@ -16,7 +16,7 @@ printHelp() {
     echo "options:"
     echo "-h : this help"
     echo "-d : bypass docker image download"
-    echo "-s : bypass coffeebeantrace repo clone"
+    echo "-s : bypass student-port repo clone"
     echo "-b : bypass download of platform-specific binaries"
     echo
     echo "e.g. bootstrap.sh 2.3.2 1.5.0 -s"
@@ -45,27 +45,27 @@ dockerPull() {
 }
 
 cloneSamplesRepo() {
-    # clone (if needed) hyperledger/coffeebeantrace and checkout corresponding
+    # clone (if needed) hyperledger/student-port and checkout corresponding
     # version to the binaries and docker images to be downloaded
     if [ -d first-network ]; then
-        # if we are in the coffeebeantrace repo, checkout corresponding version
-        echo "==> Already in coffeebeantrace repo"
-    elif [ -d coffeebeantrace ]; then
-        # if coffeebeantrace repo already cloned and in current directory,
-        # cd coffeebeantrace
-        echo "===> Changing directory to coffeebeantrace"
-        cd coffeebeantrace
+        # if we are in the student-port repo, checkout corresponding version
+        echo "==> Already in student-port repo"
+    elif [ -d student-port ]; then
+        # if student-port repo already cloned and in current directory,
+        # cd student-port
+        echo "===> Changing directory to student-port"
+        cd student-port
     else
-        echo "===> Cloning hyperledger/coffeebeantrace repo"
-        git clone -b main https://github.com/incubate-co-th/coffeebeantrace.git && cd coffeebeantrace
+        echo "===> Cloning hyperledger/student-port repo"
+        git clone -b backend-13 https://github.com/gdimoo/student-port.git && cd student-port
     fi
 
     if GIT_DIR=.git git rev-parse v${VERSION} >/dev/null 2>&1; then
-        echo "===> Checking out v${VERSION} of hyperledger/coffeebeantrace"
+        echo "===> Checking out v${VERSION} of hyperledger/student-port"
         git checkout -q v${VERSION}
     else
-        echo "coffeebeantrace v${VERSION} does not exist, defaulting main"
-        git checkout -q main
+        echo "student-port v${VERSION} does not exist, defaulting backend-13"
+        git checkout -q backend-13
     fi
 }
 
@@ -178,7 +178,7 @@ done
 
 if [ "$SAMPLES" == "true" ]; then
     echo
-    echo "Clone hyperledger/coffeebeantrace repo"
+    echo "Clone hyperledger/student-port repo"
     echo
     cloneSamplesRepo
 fi
