@@ -57,7 +57,7 @@ cloneSamplesRepo() {
         cd student-port
     else
         echo "===> Cloning hyperledger/student-port repo"
-        git clone -b backend-13 https://github.com/gdimoo/student-port.git && cd student-port
+        git clone -b network http://projectcs.sci.ubu.ac.th/senior-prj-63/60114440350.git student-port && cd student-port
     fi
 
     if GIT_DIR=.git git rev-parse v${VERSION} >/dev/null 2>&1; then
